@@ -1,0 +1,12 @@
+//
+//  Config.xcconfig
+//  commandlinetool
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+
+MACOSX_DEPLOYMENT_TARGET = 10.14
+IPHONEOS_DEPLOYMENT_TARGET = 12
+SWIFT_VERSION = 4.2
