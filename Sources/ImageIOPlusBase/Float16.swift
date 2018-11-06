@@ -8,7 +8,28 @@
 
 import Accelerate
 
-public struct Float16: RawRepresentable, Comparable, CustomStringConvertible {
+public typealias Float16Raw = UInt16
+
+extension Float16Raw {
+    public func float16ToFloat() -> Float {
+        return UInt16.float16s_to_floats(values: [self])[0]
+    }
+    
+    public static func float16_to_float(value: UInt16) -> Float {
+        return float16s_to_floats(values: [value])[0]
+    }
+    
+    public static func float16s_to_floats(values: [UInt16]) -> [Float] {
+        var inputs: [UInt16] = values
+        var outputs: [Float] = Array<Float>(repeating: 0, count: values.count)
+        let width = vImagePixelCount(values.count)
+        var sourceBuffer = vImage_Buffer(data: &inputs, height: 1, width: width, rowBytes: MemoryLayout<UInt16>.size * values.count)
+        var destinationBuffer = vImage_Buffer(data: &outputs, height: 1, width: width, rowBytes: MemoryLayout<Float>.size * values.count)
+        vImageConvert_Planar16FtoPlanarF(&sourceBuffer, &destinationBuffer, 0)
+        return outputs
+    }
+}
+/*public struct Float16: RawRepresentable, Comparable, CustomStringConvertible {
     public static func < (lhs: Float16, rhs: Float16) -> Bool {
         return lhs.floatValue < rhs.floatValue
     }
@@ -58,4 +79,4 @@ public struct Float16: RawRepresentable, Comparable, CustomStringConvertible {
     public var description: String {
         return self.floatValue.description
     }
-}
+}*/

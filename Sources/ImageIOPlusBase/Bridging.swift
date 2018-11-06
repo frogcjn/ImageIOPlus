@@ -6,6 +6,8 @@
 //  Copyright © 2018 Cao, Jiannan. All rights reserved.
 //
 
+import class CoreGraphics.CGColorSpace
+
 protocol _CFBridgeable {
     associatedtype CFType
     var _cfObject: CFType { get }

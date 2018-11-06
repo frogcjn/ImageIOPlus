@@ -8,16 +8,17 @@
 
 import CoreVideo
 import ImageIOPlusBase
+import typealias ImageIOPlusBase.Float16Raw
+import Accelerate
 
 public extension CVPixelBuffer {
-    func pixel<Element>(x: Int, y: Int, elementType: Element.Type) -> Element {
+    /*func pixel<Element>(x: Int, y: Int, elementType: Element.Type) -> Element {
         return withBaseAddressLocked(.readOnly) {
             return baseAddress
                 .advanced(by: y * bytesPerRow + x * MemoryLayout<Element>.size)
                 .assumingMemoryBound(to: Element.self)[0]
         }
     }
-    
     func setPixel<Element>(x: Int, y: Int, value: Element) {
         withBaseAddressLocked {
             /*guard let baseAddress = baseAddress else {
@@ -31,28 +32,153 @@ public extension CVPixelBuffer {
         }
     }
     
-    func minMaxPixel<Element>(elementType: Element.Type) -> (min: Element, max: Element)? {
+    func pixels<Element>(elementType: Element.Type) -> [Element] {
         return withBaseAddressLocked(.readOnly) {
-            if Element.self == Float16.self {
-                var minValue: Float?
-                var maxValue: Float?
-                for i in 0..<width {
-                    for j in 0..<height {
-                        let value = pixel(x: i, y:j, elementType: Float16.self).floatValue
-                        minValue = minValue.map { min($0, value) } ?? value
-                        maxValue = minValue.map { max($0, value) } ?? value
-                    }
-                }
-                
-                if let minValue = minValue, let maxValue = maxValue {
-                    return (Float16(minValue) as! Element, Float16(maxValue) as! Element)
-                }
-                return nil
-                
-            }
-            return nil
+            let width = self.width
+            let height = self.height
+            let bytesPerRow = self.bytesPerRow
+            var baseAddress = self.baseAddress
+
+            return Array(
+                (0..<height).map { _ -> [Element] in
+                    let row = [Element](UnsafeBufferPointer(start: baseAddress.assumingMemoryBound(to: Element.self), count: width))
+                    baseAddress = baseAddress.advanced(by: bytesPerRow)
+                    return row
+                }.joined()
+            )
         }
     }
+    */
+
+    func pixels_float16() -> [Float] {
+        return withBaseAddressLocked(.readOnly) {
+            let width       = self.width
+            let height      = self.height
+            let bytesPerRow = self.bytesPerRow
+            let baseAddress = self.baseAddress
+            var float16Array: [Float] = [Float](repeating: 0, count: width * height)
+            
+            var sourceBuffer      = vImage_Buffer(data: baseAddress,   height: UInt(height), width: UInt(width), rowBytes: bytesPerRow)
+            var destinationBuffer = vImage_Buffer(data: &float16Array, height: UInt(height), width: UInt(width), rowBytes: MemoryLayout<Float>.size * width)
+            vImageConvert_Planar16FtoPlanarF(&sourceBuffer, &destinationBuffer, 0)
+            
+            return float16Array
+        }
+    }
+    
+    func pixels_float16() -> [UInt32] {
+        return withBaseAddressLocked(.readOnly) {
+            let width       = self.width
+            let height      = self.height
+            let bytesPerRow = self.bytesPerRow
+            let baseAddress = self.baseAddress
+            
+            let rowBuffers = (0..<height).map {
+                UnsafeBufferPointer(start: baseAddress.advanced(by: $0 * bytesPerRow).assumingMemoryBound(to: UInt32.self), count: width)
+            }
+            return .init(rowBuffers.joined())
+        }
+    }
+    
+    func pixels_float32() -> [Float32] {
+        return withBaseAddressLocked(.readOnly) {
+            let width = self.width
+            let height = self.height
+            let bytesPerRow = self.bytesPerRow
+            let baseAddress = self.baseAddress
+            
+            let rowBuffers = (0..<height).map {
+                UnsafeBufferPointer(start: baseAddress.advanced(by: $0 * bytesPerRow).assumingMemoryBound(to: Float32.self), count: width)
+            }
+            return .init(rowBuffers.joined())
+        }
+    }
+    
+    func data_float16() -> Data {
+        return withBaseAddressLocked(.readOnly) {
+            let width       = self.width
+            let height      = self.height
+            let bytesPerRow = self.bytesPerRow
+            let data        = Data(bytes: baseAddress, count: dataSize)
+            
+            // According to Core Video engineering, the reason that the bytes per row is rounded up from 180 to 196 is because of a required 16 byte alignment. 180 / 16 = 11.25; 192 / 16 = 12.0.
+            // https://stackoverflow.com/questions/46879895/byte-per-row-is-wrong-when-creating-a-cvpixelbuffer-with-width-multiple-of-90
+            let rowBuffers = (0..<height).map {
+                data.advanced(by: $0 * bytesPerRow)[0..<MemoryLayout<UInt16>.size * width]
+            }
+            return .init(rowBuffers.joined())
+        }
+    }
+    
+    func data_float32() -> Data {
+        return withBaseAddressLocked(.readOnly) {
+            let width       = self.width
+            let height      = self.height
+            let bytesPerRow = self.bytesPerRow
+            let data        = Data(bytes: baseAddress, count: dataSize)
+            
+            // According to Core Video engineering, the reason that the bytes per row is rounded up from 180 to 196 is because of a required 16 byte alignment. 180 / 16 = 11.25; 192 / 16 = 12.0.
+            // https://stackoverflow.com/questions/46879895/byte-per-row-is-wrong-when-creating-a-cvpixelbuffer-with-width-multiple-of-90
+            let rowBuffers = (0..<height).map {
+                data.advanced(by: $0 * bytesPerRow)[0..<MemoryLayout<Float32>.size * width]
+            }
+            return .init(rowBuffers.joined())
+        }
+    }
+    
+    /*func minMaxPixel_float16() -> (min: Float, max: Float)? {
+        return withBaseAddressLocked(.readOnly) {
+            let width = self.width
+            let height = self.height
+            let bytesPerRow = self.bytesPerRow
+            let baseAddress = self.baseAddress
+            var baseAddressFloat32: [Float] = [Float](repeating: 0, count: width * height)
+            
+            var sourceBuffer = vImage_Buffer(data: baseAddress, height: UInt(height), width: UInt(width), rowBytes: bytesPerRow)
+            var destinationBuffer = vImage_Buffer(data: &baseAddressFloat32, height: UInt(height), width: UInt(width), rowBytes: MemoryLayout<Float>.size * width)
+            vImageConvert_Planar16FtoPlanarF(&sourceBuffer, &destinationBuffer, 0)
+            
+            var minValue = baseAddressFloat32[0]
+            var maxValue = baseAddressFloat32[0]
+            for y in 0..<height {
+                for x in 0..<width {
+                    let value = baseAddressFloat32[y*width + x]
+                    if value > maxValue { maxValue = value }
+                    if value < minValue { minValue = value }
+                }
+            }
+            return (minValue, maxValue)
+        }
+    }
+    
+    func minMaxPixel_float32() -> (min: Float, max: Float)? {
+        return withBaseAddressLocked(.readOnly) {
+            let width = self.width
+            let height = self.height
+            let bytesPerRow = self.bytesPerRow
+            let baseAddress = self.baseAddress
+            var baseAddressFloat32: [Float] = [Float](repeating: 0, count: width * height)
+            [Float32](start: )
+            // var inputs: [UInt16] = values
+            // var outputs: [Float] = Array<Float>(repeating: 0, count: values.count)
+            // let width = vImagePixelCount(values.count)
+            var sourceBuffer = vImage_Buffer(data: baseAddress, height: UInt(height), width: UInt(width), rowBytes: bytesPerRow)
+            var destinationBuffer = vImage_Buffer(data: &baseAddressFloat32, height: UInt(height), width: UInt(width), rowBytes: MemoryLayout<Float>.size * width)
+            vImageConvert_Planar16FtoPlanarF(&sourceBuffer, &destinationBuffer, 0)
+            
+            // if Element.self == UInt16.self {
+            var minValue = baseAddressFloat32[0]
+            var maxValue = baseAddressFloat32[0]
+            for y in 0..<height {
+                for x in 0..<width {
+                    let value = baseAddressFloat32[y*width + x]
+                    if value > maxValue { maxValue = value }
+                    if value < minValue { minValue = value }
+                }
+            }
+            return (minValue, maxValue)
+        }
+    }*/
     
     func data(bytesPerPixel: Int) -> Data? {
         return withBaseAddressLocked(.readOnly) {

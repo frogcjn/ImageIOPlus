@@ -52,9 +52,11 @@ public extension CVImageBuffer {
      @result     A CGColorSpaceRef representing the color space of the buffer.
      Returns NULL if called with a non-CVImageBufferRef type or NULL.
      */
+    #if os(macOS)
     var colorSpace: Unmanaged<CGColorSpace>? {
         return CVImageBufferGetColorSpace(self)
     }
+    #endif
     
     
     /*!
