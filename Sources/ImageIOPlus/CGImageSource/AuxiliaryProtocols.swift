@@ -16,7 +16,7 @@ public protocol CGImageSourceImageCollectionWithAuxiliaryImageProtocol : CGImage
     func containsAuxiliaryImage(type: CGImageSource.AuxiliaryType) -> Bool
     func auxiliaryImage(type: CGImageSource.AuxiliaryType) -> Element?
 
-    func auxiliaryData(type: CGImageSource.AuxiliaryType) -> CGImageSource.Image.AuxiliaryDataInfo?
+    func auxiliaryData(type: CGImageSource.AuxiliaryType) -> CGImageSourceImage.AuxiliaryDataInfo?
     var depthData: AVDepthData? { get }
     var matte: AVPortraitEffectsMatte? { get }
 }
@@ -35,7 +35,7 @@ public extension CGImageSourceImageCollectionWithAuxiliaryImageProtocol {
         return auxiliaryImageIndex(type: type) != nil
     }
     
-    func auxiliaryData(type: CGImageSource.AuxiliaryType) -> CGImageSource.Image.AuxiliaryDataInfo? {
+    func auxiliaryData(type: CGImageSource.AuxiliaryType) -> CGImageSourceImage.AuxiliaryDataInfo? {
         return auxiliaryImage(type: type)?.auxiliaryData(type: type)
     }
     
@@ -70,8 +70,8 @@ public extension CGImageSourceImageCollectionWithAuxiliaryImageProtocol {
 
 @available(OSX 10.13, *)
 public protocol CGImageSourceImageWithAuxiliaryDataProtocol : CGImageSourceImageWithStatusProtocol {
-    func auxiliaryData(cgType: CGImageAuxiliaryDataType) -> CGImageSource.Image.AuxiliaryDataInfo? /* required implement */
-    func auxiliaryData(type: CGImageSource.AuxiliaryType) -> CGImageSource.Image.AuxiliaryDataInfo? /* required implement */
+    func auxiliaryData(cgType: CGImageAuxiliaryDataType) -> CGImageSourceImage.AuxiliaryDataInfo? /* required implement */
+    func auxiliaryData(type: CGImageSource.AuxiliaryType) -> CGImageSourceImage.AuxiliaryDataInfo? /* required implement */
     func rawAuxiliaryData(cgType: CGImageAuxiliaryDataType) -> CFDictionary? /* required implement */
     func rawAuxiliaryData(type: CGImageSource.AuxiliaryType) -> CFDictionary? /* required implement */
 

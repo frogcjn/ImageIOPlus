@@ -19,13 +19,13 @@ public protocol CGImageSourceCollectionWithStatusProtocol {
 
 public protocol CGImageSourceImageWithStatusProtocol : CGImageSourceCollectionWithStatusProtocol {
     var metadata: CGImageMetadata? { get }
-    func metadata(options: CGImageSource.Image.Options?) -> CGImageMetadata?
+    func metadata(options: CGImageSourceImage.Options?) -> CGImageMetadata?
     
     var thumbnail: CGImage? { get }
-    func thumbnail(options: CGImageSource.Image.Options?) -> CGImage?
+    func thumbnail(options: CGImageSourceImage.Options?) -> CGImage?
     
     var cgImage: CGImage? { get }
-    func cgImage(options: CGImageSource.Image.Options?) -> CGImage?
+    func cgImage(options: CGImageSourceImage.Options?) -> CGImage?
     
     func removeCache()
     

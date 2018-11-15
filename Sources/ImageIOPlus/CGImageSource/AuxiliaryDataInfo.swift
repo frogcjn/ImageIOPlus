@@ -13,7 +13,7 @@ import ImageIOPlusBase
 // kCGImageAuxiliaryDataInfoData
 // kCGImageAuxiliaryDataInfoMetadata
 // kCGImageAuxiliaryDataInfoDataDescription
-public extension CGImageSource.Image {
+public extension CGImageSourceImage {
     struct AuxiliaryDataInfo : RawKeyDictionaryWrapper {
         public typealias RawValue = [String: Any]
 
@@ -57,13 +57,13 @@ public extension CGImageSource.Image {
 import AVFoundation
 
 public extension AVDepthData {
-    convenience init(auxiliaryData: CGImageSource.Image.AuxiliaryDataInfo) throws {
+    convenience init(auxiliaryData: CGImageSourceImage.AuxiliaryDataInfo) throws {
         try self.init(fromDictionaryRepresentation: auxiliaryData.rawValue)
     }
 }
 
 public extension AVPortraitEffectsMatte {
-    convenience init(auxiliaryData: CGImageSource.Image.AuxiliaryDataInfo) throws {
+    convenience init(auxiliaryData: CGImageSourceImage.AuxiliaryDataInfo) throws {
         try self.init(fromDictionaryRepresentation: auxiliaryData.rawValue)
     }
 }

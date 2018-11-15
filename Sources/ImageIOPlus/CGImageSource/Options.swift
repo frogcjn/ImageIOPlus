@@ -68,7 +68,7 @@ public extension CGImageSource {
     }
 }
 
-public extension CGImageSource.Image {
+public extension CGImageSourceImage {
     typealias Options = CGImageSource.Options
 }
 

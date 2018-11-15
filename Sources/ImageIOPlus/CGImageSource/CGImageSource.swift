@@ -48,20 +48,6 @@ public extension CGImageSource {
     }
 }
 
-// MARK: - Image of CGImageSource
-
-public extension CGImageSource {
-    struct Image  {
-        public let index: Int
-        public unowned let imageSource: CGImageSource
-        public init(index: Int, imageSource: CGImageSource) {
-            assert(0..<imageSource.count ~= index, "index out of range for imageSource.")
-            self.index = index
-            self.imageSource = imageSource
-        }
-    }
-}
-
 // MARK: - Collection
 
 extension CGImageSource : CGImageSourceImageCollectionProtocol {
@@ -69,8 +55,8 @@ extension CGImageSource : CGImageSourceImageCollectionProtocol {
         return CGImageSourceGetCount(self)
     }
     
-    public subscript(_ index: Int) -> Image {
-        return Image(index: index, imageSource: self)
+    public subscript(_ index: Int) -> CGImageSourceImage {
+        return CGImageSourceImage(index: index, imageSource: self)
     }
 }
 
@@ -104,7 +90,7 @@ extension CGImageSource : CGImageSourceCollectionWithStatusProtocol {
 
 // MARK: - Image with Status
 
-extension CGImageSource.Image : CGImageSourceImageWithStatusProtocol {
+extension CGImageSourceImage : CGImageSourceImageWithStatusProtocol {
     
     public var status: CGImageSourceStatus {
         return CGImageSourceGetStatusAtIndex(imageSource, index)
@@ -157,7 +143,7 @@ extension CGImageSource : CGImageSourceImageCollectionWithAuxiliaryImageProtocol
 // MARK: - Image with AuxiliaryData
 
 @available(OSX 10.13, *)
-extension CGImageSource.Image : CGImageSourceImageWithAuxiliaryDataProtocol {
+extension CGImageSourceImage : CGImageSourceImageWithAuxiliaryDataProtocol {
     public func rawAuxiliaryData(cgType: CGImageAuxiliaryDataType) -> CFDictionary? {
         return CGImageSourceCopyAuxiliaryDataInfoAtIndex(imageSource, index, cgType.rawValue as CFString)
     }
