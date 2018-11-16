@@ -28,7 +28,6 @@ public extension CVPixelBuffer {
      @param      pixelBufferOut          The new pixel buffer will be returned here
      @result    returns kCVReturnSuccess on success.
      */
-    @available(OSX 10.4, *)
     public class func `init`(
         allocator: CFAllocator? = nil,
         pixelFormat: CVPixelFormat,
@@ -61,7 +60,6 @@ public extension CVPixelBuffer {
      @param      pixelBufferOut          The new pixel buffer will be returned here
      @result    returns kCVReturnSuccess on success.
      */
-    @available(OSX 10.4, *)
     public func `init`(
         allocator: CFAllocator? = nil,
         pixelFormat: CVPixelFormat,
@@ -111,7 +109,6 @@ public extension CVPixelBuffer {
      @param      pixelBufferOut          The new pixel buffer will be returned here
      @result    returns kCVReturnSuccess on success.
      */
-    @available(OSX 10.4, *)
     public func `init`(
         allocator: CFAllocator? = nil,
         pixelFormat: CVPixelFormat,
@@ -175,7 +172,6 @@ public extension CVPixelBuffer {
      @param      resolvedDictionaryOut The resulting dictionary will be placed here.
      @result     Return value that may be useful in discovering why resolution failed.
      */
-    @available(OSX 10.4, *)
     class func resolve(
         allocator: CFAllocator? = nil,
         attributesArray: [Attributes]
@@ -261,7 +257,6 @@ public extension CVPixelBuffer {
      @param      pixelBuffer Target PixelBuffer.
      @result     True if the PixelBuffer was created using CVPixelBufferCreateWithPlanarBytes.
      */
-    @available(OSX 10.4, *)
     var isPlanar: Bool {
         return CVPixelBufferIsPlanar(self)
     }
@@ -281,7 +276,6 @@ public extension CVPixelBuffer {
      @param      pixelBuffer Target PixelBuffer.
      @result     Number of planes.  Returns 0 for non-planar CVPixelBufferRefs.
      */
-    @available(OSX 10.4, *)
     var planeCount: Int {
         return CVPixelBufferGetPlaneCount(self)
     }
@@ -295,7 +289,6 @@ public extension CVPixelBuffer {
      @param      planeIndex  Identifying the plane.
      @result     Width in pixels, or 0 for non-planar CVPixelBufferRefs.
      */
-    @available(OSX 10.4, *)
     func widthOfPlane(at planeIndex: Int) -> Int {
         return CVPixelBufferGetWidthOfPlane(self, planeIndex)
     }
@@ -309,7 +302,6 @@ public extension CVPixelBuffer {
      @param      planeIndex  Identifying the plane.
      @result     Height in pixels, or 0 for non-planar CVPixelBufferRefs.
      */
-    @available(OSX 10.4, *)
     func heightOfPlane(at planeIndex: Int) -> Int {
         return CVPixelBufferGetHeightOfPlane(self, planeIndex)
     }
@@ -324,7 +316,6 @@ public extension CVPixelBuffer {
      @param      planeIndex  Identifying the plane.
      @result     Base address of the plane, or NULL for non-planar CVPixelBufferRefs.
      */
-    @available(OSX 10.4, *)
     func baseAddressOfPlane(at planeIndex: Int) -> UnsafeMutableRawPointer? {
         return CVPixelBufferGetBaseAddressOfPlane(self, planeIndex)
     }
@@ -338,7 +329,6 @@ public extension CVPixelBuffer {
      @param      planeIndex  Identifying the plane.
      @result     Row bytes of the plane, or NULL for non-planar CVPixelBufferRefs.
      */
-    @available(OSX 10.4, *)
     func bytesPerRowOfPlane(at planeIndex: Int) -> Int {
         return CVPixelBufferGetBytesPerRowOfPlane(self, planeIndex)
     }

@@ -1,6 +1,6 @@
 //
 //  CVPixelBufferPool.swift
-//  get-auxiliary
+//  get-aux
 //
 //  Created by Cao, Jiannan on 2018/11/4.
 //  Copyright © 2018 Cao, Jiannan. All rights reserved.
@@ -89,7 +89,6 @@ public extension CVPixelBufferPool {
      @param      pool  The CVPixelBufferPoolRef to retrieve the attributes from
      @result     Returns the pool attributes dictionary, or NULL on failure.
      */
-    @available(OSX 10.4, *)
     var attributes: CFDictionary? {
         return CVPixelBufferPoolGetAttributes(self)
     }
@@ -102,12 +101,10 @@ public extension CVPixelBufferPool {
      @param      pool  The CVPixelBufferPoolRef to retrieve the attributes from
      @result     Returns the pixel buffer attributes dictionary, or NULL on failure.
      */
-    @available(OSX 10.4, *)
     public var pixelBufferAttributes: CFDictionary? {
         return CVPixelBufferPoolGetPixelBufferAttributes(self)
     }
 
-    @available(OSX 10.4, *)
     public class var typeID: CFTypeID {
         return CVPixelBufferPoolGetTypeID()
     }
@@ -172,7 +169,7 @@ public extension CVPixelBufferPool {
 public let kCVPixelBufferPoolMinimumBufferCountKey: CFString
 public let kCVPixelBufferPoolMaximumBufferAgeKey: CFString
  
- // Key for the auxiliary attributes dictionary passed to CVPixelBufferPoolCreatePixelBufferWithAuxAttributes().
+ // Key for the aux attributes dictionary passed to CVPixelBufferPoolCreatePixelBufferWithAuxAttributes().
  
  // When set, indicates that a new pixel buffer should not be allocated if
  // the pool already has this many or more pixel buffers allocated.

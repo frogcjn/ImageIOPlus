@@ -63,7 +63,6 @@ extension CGImageSource : CGImageSourceImageCollectionProtocol {
 // MARK: - Collection with PrimaryImage
 
 extension CGImageSource : CGImageSourceImageCollectionWithPrimaryImageProtocol {
-    @available(OSX 10.14, *)
     public var primaryImageIndex: Int? {
         let primaryImageIndex = CGImageSourceGetPrimaryImageIndex(self)
         guard 0..<count ~= primaryImageIndex else { return nil }
@@ -80,10 +79,10 @@ extension CGImageSource : CGImageSourceCollectionWithStatusProtocol {
     }
     
     // properties
-    public var properties: [String: Any]? {
+    public var properties: [String: Any]? { // CGImageProperties
         return properties(options: nil)
     }
-    public func properties(options: Options?) -> [String: Any]? {
+    public func properties(options: Options?) -> [String: Any]? { // CGImageProperties
         return CGImageSourceCopyProperties(self, options?.rawValue as CFDictionary?) as! [String: Any]?
     }
 }
@@ -91,16 +90,16 @@ extension CGImageSource : CGImageSourceCollectionWithStatusProtocol {
 // MARK: - Image with Status
 
 extension CGImageSourceImage : CGImageSourceImageWithStatusProtocol {
-    
+    // status
     public var status: CGImageSourceStatus {
         return CGImageSourceGetStatusAtIndex(imageSource, index)
     }
     
     // properties
-    public var properties: [String: Any]? {
+    public var properties: [String: Any]? { // CGImageProperties
         return properties(options: nil)
     }
-    public func properties(options: Options?) -> [String: Any]? {
+    public func properties(options: Options?) -> [String: Any]? { // CGImageProperties
         return CGImageSourceCopyPropertiesAtIndex(imageSource, index, options?.rawValue as CFDictionary?) as! [String: Any]?
     }
     
@@ -134,40 +133,40 @@ extension CGImageSourceImage : CGImageSourceImageWithStatusProtocol {
 }
 
 
-// MARK: - Collection with AuxiliaryImage
+// MARK: - Collection with AuxImage
 
-extension CGImageSource : CGImageSourceImageCollectionWithAuxiliaryImageProtocol {
+extension CGImageSource : CGImageSourceImageCollectionWithAuxImageProtocol {
     
 }
 
-// MARK: - Image with AuxiliaryData
+// MARK: - Image with aux
 
-@available(OSX 10.13, *)
-extension CGImageSourceImage : CGImageSourceImageWithAuxiliaryDataProtocol {
-    public func rawAuxiliaryData(cgType: CGImageAuxiliaryDataType) -> CFDictionary? {
-        return CGImageSourceCopyAuxiliaryDataInfoAtIndex(imageSource, index, cgType.rawValue as CFString)
+extension CGImageSourceImage : CGImageSourceImageWithAuxProtocol {
+    /*public func rawAux(cgType: CGImageAuxType) -> CFDictionary? {
+        return CGImageSourceCopyAuxAtIndex(imageSource, index, cgType.rawValue as CFString)
+    }*/
+    
+    public func aux(type: CGImageAuxType) -> CGImageAux? {
+        return (CGImageSourceCopyAuxiliaryDataInfoAtIndex(imageSource, index, type.rawValue as CFString) as! [String: Any]?).map { CGImageAux.init(rawValue: $0)! }
     }
     
-    public func auxiliaryData(cgType: CGImageAuxiliaryDataType) -> AuxiliaryDataInfo? {
-        let info = CGImageSourceCopyAuxiliaryDataInfoAtIndex(imageSource, index, cgType.rawValue as CFString) as! [String: Any]?
-        return info.map{ AuxiliaryDataInfo(rawValue: $0)! }
-    }
-    
-    public func rawAuxiliaryData(type: CGImageSource.AuxiliaryType) -> CFDictionary? {
+    /*public func rawAux(type: CGImageSource.AuxType) -> CFDictionary? {
         switch type {
         case .disparityOrDepth:
-            return rawAuxiliaryData(cgType: .disparity) ?? rawAuxiliaryData(cgType: .depth)
+            return rawAux(cgType: .disparity) ?? rawAux(cgType: .depth)
         case .matte:
-            return rawAuxiliaryData(cgType: .portraitEffectsMatte)
+            return rawAux(cgType: .portraitEffectsMatte)
         }
-    }
-    
-    public func auxiliaryData(type: CGImageSource.AuxiliaryType) -> AuxiliaryDataInfo? {
-        switch type {
+    }*/
+}
+
+extension CGImageSourceImage {
+    /*public func aux(at: AT) -> CGImageAux? {
+        switch at {
         case .disparityOrDepth:
-            return auxiliaryData(cgType: .disparity) ?? auxiliaryData(cgType: .depth)
+            return aux(type: .disparity) ?? aux(type: .depth)
         case .matte:
-            return auxiliaryData(cgType: .portraitEffectsMatte)
+            return aux(type: .portraitEffectsMatte)
         }
-    }
+    }*/
 }

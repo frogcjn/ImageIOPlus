@@ -9,39 +9,41 @@
 import ImageIO
 import AVFoundation
 
-// MARK: - Collection with Auxiliary Image
+// MARK: - Collection with Aux Image
 
-public protocol CGImageSourceImageCollectionWithAuxiliaryImageProtocol : CGImageSourceImageCollectionWithPrimaryImageProtocol where Element : CGImageSourceImageWithAuxiliaryDataProtocol {
-    func auxiliaryImageIndex(type: CGImageSource.AuxiliaryType) -> Index?
-    func containsAuxiliaryImage(type: CGImageSource.AuxiliaryType) -> Bool
-    func auxiliaryImage(type: CGImageSource.AuxiliaryType) -> Element?
-
-    func auxiliaryData(type: CGImageSource.AuxiliaryType) -> CGImageSourceImage.AuxiliaryDataInfo?
+public protocol CGImageSourceImageCollectionWithAuxImageProtocol : CGImageSourceImageCollectionWithPrimaryImageProtocol where Element : CGImageSourceImageWithAuxProtocol {
+    func auxImageIndex(type: CGImageAuxType) -> Index?
+    func containsAuxImage(type: CGImageAuxType) -> Bool
+    func auxImage(type: CGImageAuxType) -> Element?
+    func aux(type: CGImageAuxType) -> CGImageAux?
+    
+    var depthDataWithoutApplyingOrientation: AVDepthData? { get }
     var depthData: AVDepthData? { get }
-    var matte: AVPortraitEffectsMatte? { get }
+    var portraitEffectsMatte: AVPortraitEffectsMatte? { get }
+    var portraitEffectsMatteWithoutApplyingOrientation: AVPortraitEffectsMatte? { get }
 }
 
 // default implement
-public extension CGImageSourceImageCollectionWithAuxiliaryImageProtocol {
-    func auxiliaryImageIndex(type: CGImageSource.AuxiliaryType) -> Index? {
-        return primaryOrderedIndices.first { self[$0].containsAuxiliaryData(type: type) }
+public extension CGImageSourceImageCollectionWithAuxImageProtocol {
+    func auxImageIndex(type: CGImageAuxType) -> Index? {
+        return primaryOrderedIndices.first { self[$0].containsAux(type: type) }
     }
     
-    func auxiliaryImage(type: CGImageSource.AuxiliaryType) -> Element? {
-        return auxiliaryImageIndex(type: type).map { self[$0] }
+    func auxImage(type: CGImageAuxType) -> Element? {
+        return auxImageIndex(type: type).map { self[$0] }
     }
     
-    func containsAuxiliaryImage(type: CGImageSource.AuxiliaryType) -> Bool {
-        return auxiliaryImageIndex(type: type) != nil
+    func containsAuxImage(type: CGImageAuxType) -> Bool {
+        return auxImageIndex(type: type) != nil
     }
     
-    func auxiliaryData(type: CGImageSource.AuxiliaryType) -> CGImageSourceImage.AuxiliaryDataInfo? {
-        return auxiliaryImage(type: type)?.auxiliaryData(type: type)
+    func aux(type: CGImageAuxType) -> CGImageAux? {
+        return auxImage(type: type)?.aux(type: type)
     }
     
     var depthDataWithoutApplyingOrientation: AVDepthData? {
         do {
-            return try auxiliaryData(type: .disparityOrDepth).map { try AVDepthData(auxiliaryData: $0) }
+            return try (aux(type: .depth) ?? aux(type: .disparity)).map { try AVDepthData(aux: $0) }
         } catch {
             print(error)
             return nil
@@ -49,43 +51,49 @@ public extension CGImageSourceImageCollectionWithAuxiliaryImageProtocol {
     }
     
     var depthData: AVDepthData? {
-        guard let properties = auxiliaryImage(type: .disparityOrDepth)?.properties else {
+        guard let properties = (auxImage(type: .depth) ?? auxImage(type: .disparity))?.properties else {
             print("disparityOrDepth, invalidProperties")
             return nil
         }
         return depthDataWithoutApplyingOrientation?.applyingExifOrientation(CGImagePropertyOrientation(rawValue: properties[kCGImagePropertyOrientation as String] as! UInt32)!)
     }
     
-    var matte: AVPortraitEffectsMatte? {
+    var portraitEffectsMatteWithoutApplyingOrientation: AVPortraitEffectsMatte? {
         do {
-            return try auxiliaryData(type: .matte).map { try AVPortraitEffectsMatte(auxiliaryData: $0) }
+            return try aux(type: .portraitEffectsMatte).map { try AVPortraitEffectsMatte(aux: $0) }
         } catch {
             print(error)
             return nil
         }
     }
+    
+    var portraitEffectsMatte: AVPortraitEffectsMatte? {
+        guard let properties = auxImage(type: .portraitEffectsMatte)?.properties else {
+            print("disparityOrDepth, invalidProperties")
+            return nil
+        }
+        return portraitEffectsMatteWithoutApplyingOrientation?.applyingExifOrientation(CGImagePropertyOrientation(rawValue: properties[kCGImagePropertyOrientation as String] as! UInt32)!)
+    }
 }
 
-// MARK - Image with Auxiliary Data
+// MARK - Image with Aux Data
 
-@available(OSX 10.13, *)
-public protocol CGImageSourceImageWithAuxiliaryDataProtocol : CGImageSourceImageWithStatusProtocol {
-    func auxiliaryData(cgType: CGImageAuxiliaryDataType) -> CGImageSourceImage.AuxiliaryDataInfo? /* required implement */
-    func auxiliaryData(type: CGImageSource.AuxiliaryType) -> CGImageSourceImage.AuxiliaryDataInfo? /* required implement */
-    func rawAuxiliaryData(cgType: CGImageAuxiliaryDataType) -> CFDictionary? /* required implement */
-    func rawAuxiliaryData(type: CGImageSource.AuxiliaryType) -> CFDictionary? /* required implement */
+public protocol CGImageSourceImageWithAuxProtocol : CGImageSourceImageWithStatusProtocol {
+    func aux(type: CGImageAuxType) -> CGImageAux? /* required implement */
+    // func aux(at: AT) -> CGImageAux? /* required implement */
+    // func rawAux(cgType: CGImageAuxType) -> CFDictionary? /* required implement */
+    // func rawAux(type: CGImageSource.AuxType) -> CFDictionary? /* required implement */
 
-    func containsAuxiliaryData(cgType: CGImageAuxiliaryDataType) -> Bool
-    func containsAuxiliaryData(type: CGImageSource.AuxiliaryType) -> Bool
+    func containsAux(type: CGImageAuxType) -> Bool
+    // func containsAux(at: AT) -> Bool
 }
 
 // default implement
-@available(OSX 10.13, *)
-public extension CGImageSourceImageWithAuxiliaryDataProtocol {
-    func containsAuxiliaryData(cgType: CGImageAuxiliaryDataType) -> Bool {
-        return auxiliaryData(cgType: cgType) != nil
+public extension CGImageSourceImageWithAuxProtocol {
+    func containsAux(type: CGImageAuxType) -> Bool {
+        return aux(type: type) != nil
     }
-    func containsAuxiliaryData(type: CGImageSource.AuxiliaryType) -> Bool {
-        return auxiliaryData(type: type) != nil
-    }
+    /*func containsAux(at: AT) -> Bool {
+        return aux(at: at) != nil
+    }*/
 }

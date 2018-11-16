@@ -1,6 +1,6 @@
 //
 //  Float16.swift
-//  get-auxiliary
+//  get-aux
 //
 //  Created by Cao, Jiannan on 2018/11/5.
 //  Copyright © 2018 Cao, Jiannan. All rights reserved.

@@ -48,7 +48,6 @@ public extension CGImageSourceImageCollectionProtocol {
 
 // MARK: - Collection with Primary Image
 
-@available(OSX 10.14, *)
 public protocol CGImageSourceImageCollectionWithPrimaryImageProtocol : CGImageSourceImageCollectionProtocol {
     
     var primaryImageIndex: Int? { get } /* requireed */
@@ -59,7 +58,6 @@ public protocol CGImageSourceImageCollectionWithPrimaryImageProtocol : CGImageSo
 }
 
 // default implement
-@available(OSX 10.14, *)
 public extension CGImageSourceImageCollectionWithPrimaryImageProtocol {
     
     public var primaryImage: Element? {
@@ -79,7 +77,6 @@ public extension CGImageSourceImageCollectionProtocol where Self.Indices == Arra
     }
 }
 
-@available(OSX 10.14, *)
 public extension CGImageSourceImageCollectionWithPrimaryImageProtocol where Indices == ArraySlice<Index> {
     
     public var primaryOrderedIndices: Indices {

@@ -9,7 +9,6 @@
 import CoreFoundation
 import CoreVideo
 
-@available(OSX 10.4, *)
 public extension CVImageBuffer {
     /*!
      @function   CVImageBufferGetEncodedSize
@@ -94,166 +93,99 @@ public extension CVImageBuffer {
 /*
  // For legacy reasons CVImageBuffer.h includes CoreGraphics.h and ApplicationServices.h
  
- @available(OSX 10.4, *)
  public let kCVImageBufferCGColorSpaceKey: CFString // CGColorSpaceRef
- 
- @available(OSX 10.4, *)
  public let kCVImageBufferCleanApertureKey: CFString // CFDictionary containing the following four keys
- @available(OSX 10.4, *)
  public let kCVImageBufferCleanApertureWidthKey: CFString // CFNumber
- @available(OSX 10.4, *)
  public let kCVImageBufferCleanApertureHeightKey: CFString // CFNumber
- @available(OSX 10.4, *)
  public let kCVImageBufferCleanApertureHorizontalOffsetKey: CFString // CFNumber, horizontal offset from center of image buffer
- @available(OSX 10.4, *)
  public let kCVImageBufferCleanApertureVerticalOffsetKey: CFString // CFNumber, vertical offset from center of image buffer
- @available(OSX 10.4, *)
  public let kCVImageBufferPreferredCleanApertureKey: CFString // CFDictionary containing same keys as kCVImageBufferCleanApertureKey
  
- @available(OSX 10.4, *)
  public let kCVImageBufferFieldCountKey: CFString // CFNumber
- @available(OSX 10.4, *)
  public let kCVImageBufferFieldDetailKey: CFString // CFString with one of the following four values
- @available(OSX 10.4, *)
  public let kCVImageBufferFieldDetailTemporalTopFirst: CFString // CFString
- @available(OSX 10.4, *)
  public let kCVImageBufferFieldDetailTemporalBottomFirst: CFString // CFString
- @available(OSX 10.4, *)
  public let kCVImageBufferFieldDetailSpatialFirstLineEarly: CFString // CFString
- @available(OSX 10.4, *)
  public let kCVImageBufferFieldDetailSpatialFirstLineLate: CFString // CFString
  
- @available(OSX 10.4, *)
  public let kCVImageBufferPixelAspectRatioKey: CFString // CFDictionary with the following two keys
- @available(OSX 10.4, *)
  public let kCVImageBufferPixelAspectRatioHorizontalSpacingKey: CFString // CFNumber
- @available(OSX 10.4, *)
  public let kCVImageBufferPixelAspectRatioVerticalSpacingKey: CFString // CFNumber
  
- @available(OSX 10.4, *)
  public let kCVImageBufferDisplayDimensionsKey: CFString // CFDictionary with the following two keys
- @available(OSX 10.4, *)
  public let kCVImageBufferDisplayWidthKey: CFString // CFNumber
- @available(OSX 10.4, *)
  public let kCVImageBufferDisplayHeightKey: CFString // CFNumber
  
- @available(OSX 10.4, *)
  public let kCVImageBufferGammaLevelKey: CFString // CFNumber describing the gamma level, used in absence of (or ignorance of) kCVImageBufferTransferFunctionKey
  
- @available(OSX 10.6, *)
  public let kCVImageBufferICCProfileKey: CFString // CFData representation of the ICC profile
  
- @available(OSX 10.4, *)
  public let kCVImageBufferYCbCrMatrixKey: CFString // CFString describing the color matrix for YCbCr->RGB. This key can be one of the following values:
- @available(OSX 10.4, *)
  public let kCVImageBufferYCbCrMatrix_ITU_R_709_2: CFString // CFString
- @available(OSX 10.4, *)
  public let kCVImageBufferYCbCrMatrix_ITU_R_601_4: CFString // CFString
- @available(OSX 10.4, *)
  public let kCVImageBufferYCbCrMatrix_SMPTE_240M_1995: CFString // CFString
- @available(OSX 10.11, *)
  public let kCVImageBufferYCbCrMatrix_DCI_P3: CFString // CFString
- @available(OSX 10.11, *)
  public let kCVImageBufferYCbCrMatrix_P3_D65: CFString // CFString
- @available(OSX 10.11, *)
  public let kCVImageBufferYCbCrMatrix_ITU_R_2020: CFString // CFString
  
- @available(OSX 10.5, *)
  public let kCVImageBufferColorPrimariesKey: CFString // CFString describing the color primaries. This key can be one of the following values
- @available(OSX 10.5, *)
  public let kCVImageBufferColorPrimaries_ITU_R_709_2: CFString
- @available(OSX 10.5, *)
  public let kCVImageBufferColorPrimaries_EBU_3213: CFString
- @available(OSX 10.5, *)
  public let kCVImageBufferColorPrimaries_SMPTE_C: CFString
- @available(OSX 10.8, *)
  public let kCVImageBufferColorPrimaries_P22: CFString
- @available(OSX 10.11, *)
  public let kCVImageBufferColorPrimaries_DCI_P3: CFString
- @available(OSX 10.11, *)
  public let kCVImageBufferColorPrimaries_P3_D65: CFString
- @available(OSX 10.11, *)
  public let kCVImageBufferColorPrimaries_ITU_R_2020: CFString
  
- @available(OSX 10.5, *)
  public let kCVImageBufferTransferFunctionKey: CFString // CFString describing the transfer function. This key can be one of the following values
- @available(OSX 10.5, *)
  public let kCVImageBufferTransferFunction_ITU_R_709_2: CFString
- @available(OSX 10.6, *)
  public let kCVImageBufferTransferFunction_SMPTE_240M_1995: CFString
- @available(OSX 10.6, *)
  public let kCVImageBufferTransferFunction_UseGamma: CFString
  
- @available(OSX 10.13, *)
  public let kCVImageBufferTransferFunction_sRGB: CFString // IEC 61966-2-1 sRGB or sYCC
- @available(OSX 10.11, *)
  public let kCVImageBufferTransferFunction_ITU_R_2020: CFString // note: kCVImageBufferTransferFunction_ITU_R_709_2 is equivalent, and preferred
- @available(OSX 10.12, *)
  public let kCVImageBufferTransferFunction_SMPTE_ST_428_1: CFString
- @available(OSX 10.13, *)
  public let kCVImageBufferTransferFunction_SMPTE_ST_2084_PQ: CFString
- @available(OSX 10.13, *)
  public let kCVImageBufferTransferFunction_ITU_R_2100_HLG: CFString
- @available(OSX 10.14, *)
  public let kCVImageBufferTransferFunction_Linear: CFString
  
  /* Chroma siting information. For progressive images, only the TopField value is used. */
- @available(OSX 10.5, *)
  public let kCVImageBufferChromaLocationTopFieldKey: CFString // CFString with one of the following CFString values
- @available(OSX 10.5, *)
  public let kCVImageBufferChromaLocationBottomFieldKey: CFString // CFString with one of the following CFString values
- @available(OSX 10.5, *)
  public let kCVImageBufferChromaLocation_Left: CFString // Chroma sample is horizontally co-sited with the left column of luma samples, but centered vertically.
- @available(OSX 10.5, *)
  public let kCVImageBufferChromaLocation_Center: CFString // Chroma sample is fully centered
- @available(OSX 10.5, *)
  public let kCVImageBufferChromaLocation_TopLeft: CFString // Chroma sample is co-sited with the top-left luma sample.
- @available(OSX 10.5, *)
  public let kCVImageBufferChromaLocation_Top: CFString // Chroma sample is horizontally centered, but co-sited with the top row of luma samples.
- @available(OSX 10.5, *)
  public let kCVImageBufferChromaLocation_BottomLeft: CFString // Chroma sample is co-sited with the bottom-left luma sample.
- @available(OSX 10.5, *)
  public let kCVImageBufferChromaLocation_Bottom: CFString // Chroma sample is horizontally centered, but co-sited with the bottom row of luma samples.
- @available(OSX 10.5, *)
  public let kCVImageBufferChromaLocation_DV420: CFString // Cr and Cb samples are alternately co-sited with the left luma samples of the same field.
  
  // These describe the format of the original subsampled data before conversion to 422/2vuy.   In order to use
  // these tags, the data must have been converted to 4:2:2 via simple pixel replication.
- @available(OSX 10.5, *)
  public let kCVImageBufferChromaSubsamplingKey: CFString // CFString/CFNumber with one of the following values
- @available(OSX 10.5, *)
  public let kCVImageBufferChromaSubsampling_420: CFString
- @available(OSX 10.5, *)
  public let kCVImageBufferChromaSubsampling_422: CFString
- @available(OSX 10.5, *)
  public let kCVImageBufferChromaSubsampling_411: CFString
  
  // Can be set to kCFBooleanTrue as a hint that the alpha channel is fully opaque.  Not used if the pixel format type has no alpha channel.
- @available(OSX 10.10, *)
  public let kCVImageBufferAlphaChannelIsOpaque: CFString
  
  // Returns the standard integer code point corresponding to a given CoreVideo YCbCrMatrix constant string (in the kCVImageBufferYCbCrMatrix_... family).  Returns 2 (the code point for "unknown") if the string is NULL or not recognized.
- @available(OSX 10.13, *)
  public func CVYCbCrMatrixGetIntegerCodePointForString(_ yCbCrMatrixString: CFString?) -> Int32
  
  // Returns the standard integer code point corresponding to a given CoreVideo ColorPrimaries constant string (in the kCVImageBufferColorPrimaries_... family).  Returns 2 (the code point for "unknown") if the string is NULL or not recognized.
- @available(OSX 10.13, *)
  public func CVColorPrimariesGetIntegerCodePointForString(_ colorPrimariesString: CFString?) -> Int32
  
  // Returns the standard integer code point corresponding to a given CoreVideo TransferFunction constant string (in the kCVImageBufferTransferFunction_... family).  Returns 2 (the code point for "unknown") if the string is NULL or not recognized.
- @available(OSX 10.13, *)
  public func CVTransferFunctionGetIntegerCodePointForString(_ transferFunctionString: CFString?) -> Int32
  
  // Returns the CoreVideo YCbCrMatrix constant string (in the kCVImageBufferYCbCrMatrix_... family) corresponding to a given standard integer code point.  Returns NULL if the code point is not recognized, or if it is 2 (the code point for "unknown").
- @available(OSX 10.13, *)
  public func CVYCbCrMatrixGetStringForIntegerCodePoint(_ yCbCrMatrixCodePoint: Int32) -> Unmanaged<CFString>?
  
  // Returns the CoreVideo ColorPrimaries constant string (in the kCVImageBufferColorPrimaries_... family) corresponding to a given standard integer code point.  Returns NULL if the code point is not recognized, or if it is 2 (the code point for "unknown").
- @available(OSX 10.13, *)
  public func CVColorPrimariesGetStringForIntegerCodePoint(_ colorPrimariesCodePoint: Int32) -> Unmanaged<CFString>?
  
  // Returns the CoreVideo TransferFunction constant string (in the kCVImageBufferTransferFunction_... family) corresponding to a given standard integer code point.  Returns NULL if the code point is not recognized, or if it is 2 (the code point for "unknown").
- @available(OSX 10.13, *)
  public func CVTransferFunctionGetStringForIntegerCodePoint(_ transferFunctionCodePoint: Int32) -> Unmanaged<CFString>?
 
  */

@@ -1,6 +1,6 @@
 //
 //  CVBuffer+.swift
-//  get-auxiliary
+//  get-aux
 //
 //  Created by Cao, Jiannan on 2018/11/1.
 //  Copyright © 2018 Cao, Jiannan. All rights reserved.

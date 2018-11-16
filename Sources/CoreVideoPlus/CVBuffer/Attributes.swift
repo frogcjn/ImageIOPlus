@@ -170,9 +170,7 @@ public extension CVBuffer.Attributes {
 /*
  /* The following two keys are useful with the CoreVideo pool and texture cache APIs so that you can specify
  an initial set of default buffer attachments to automatically be attached to the buffer when it is created. */
- @available(OSX 10.4, *)
  public let kCVBufferPropagatedAttachmentsKey: CFString
- @available(OSX 10.4, *)
  public let kCVBufferNonPropagatedAttachmentsKey: CFString
  
  */
