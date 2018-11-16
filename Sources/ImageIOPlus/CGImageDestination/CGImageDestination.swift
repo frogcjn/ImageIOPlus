@@ -54,8 +54,8 @@ public extension CGImageDestination {
         return (CGImageDestinationCopyTypeIdentifiers() as [AnyObject] as! [CFString] as [String]).map(UTI.init(rawValue:))
     }
     
-    public static func supportsUTI(_ uti: UTI) -> Bool {
-        return supportedUTIs.contains(uti)
+    public static func supportsUTI(_ type: UTI) -> Bool {
+        return supportedUTIs.contains(type)
     }
     
     // Settings Properties
