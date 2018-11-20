@@ -17,7 +17,7 @@ public struct CGImageAux {
     public struct Info: RawKeyDictionaryWrapper {
         public typealias RawValue = [String: Any]
 
-        public enum Key : String {
+        public enum Key : String, CaseIterable {
             case metadata        = "kCGImageAuxiliaryDataInfoMetadata"
             case data            = "kCGImageAuxiliaryDataInfoData"
             case dataDescription = "kCGImageAuxiliaryDataInfoDataDescription"

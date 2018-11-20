@@ -26,7 +26,7 @@ public extension CGImageDestination {
     struct Properties : RawKeyDictionaryWrapper {
         // CGImageSourceCopyPropertiesAtIndex
         // CGImageSourceCreateImageAtIndex
-        public enum Key : String {
+        public enum Key : String, CaseIterable {
             case lossyCompressionQuality = "kCGImageDestinationLossyCompressionQuality"
             case backgroundColor = "kCGImageDestinationBackgroundColor"
             // case CGImageProperty(String)

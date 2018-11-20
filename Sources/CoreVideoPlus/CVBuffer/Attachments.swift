@@ -130,7 +130,7 @@ public extension CVBuffer.Attachments {
      ,kCVImageBufferMasteringDisplayColorVolumeKey
      */
     
-    public enum Key : String {
+    public enum Key : String, CaseIterable {
         // CVBuffer, Generally only available for frames emitted by QuickTime
         case timeValue                   = "QTMovieTime" // let kCVBufferTimeValueKey: CFString
         
@@ -165,7 +165,7 @@ public extension CVBuffer.Attachments {
          kCVImageBufferCleanApertureHorizontalOffsetKey
          kCVImageBufferCleanApertureVerticalOffsetKey
          */
-        public enum Key : String {
+        public enum Key : String, CaseIterable {
             case width            = "Width"
             case height           = "Height"
             case horizontalOffset = "HorizontalOffset"
@@ -197,7 +197,7 @@ public extension CVBuffer.Attachments {
          0x00000001a9fbda38 (     0x8) kCVImageBufferFieldDetailSpatialFirstLineLate
          */
         
-        public enum Key : String {
+        public enum Key : String, CaseIterable {
             case temporalTopFirst      = "TemporalTopFirst"
             case temporalBottomFirst   = "TemporalBottomFirst"
             case spatialFirstLineEarly = "SpatialFirstLineEarly"
@@ -226,7 +226,7 @@ public extension CVBuffer.Attachments {
          0x00000001a9fbda48 (     0x8) kCVImageBufferPixelAspectRatioHorizontalSpacingKey
          0x00000001a9fbda50 (     0x8) kCVImageBufferPixelAspectRatioVerticalSpacingKey
          */
-        public enum Key : String {
+        public enum Key : String, CaseIterable {
             case horizontalSpacing = "HorizontalSpacing"
             case verticalSpacing   = "VerticalSpacing"
         }
@@ -248,7 +248,7 @@ public extension CVBuffer.Attachments {
          0x00000001a9fbda60 (     0x8) kCVImageBufferDisplayWidthKey
          0x00000001a9fbda68 (     0x8) kCVImageBufferDisplayHeightKey
          */
-        public enum Key : String {
+        public enum Key : String, CaseIterable {
             case width  = "Width"
             case height = "Height"
         }
@@ -266,7 +266,7 @@ public extension CVBuffer.Attachments {
     }
     
     public struct TimeValue: RawKeyDictionaryWrapper {
-        public enum Key : String {
+        public enum Key : String, CaseIterable {
             case timeScale = "TimeScale"
             case timeValue = "TimeValue"
         }
@@ -290,7 +290,7 @@ public extension CVBuffer.Attachments {
      0x00000001a9fbdaa8 (     0x8) kCVImageBufferYCbCrMatrix_P3_D65
      0x00000001a9fbdab0 (     0x8) kCVImageBufferYCbCrMatrix_ITU_R_2020
      */
-    public enum YCbCrMatrix : String {
+    public enum YCbCrMatrix : String, CaseIterable {
         case ITU_R_709_2
         case ITU_R_601_4
         case SMPTE_240M_1995
@@ -312,7 +312,7 @@ public extension CVBuffer.Attachments {
      0x00000001a9fbdb48 (     0x8) kCVImageBufferTransferFunction_aYCC
      0x00000001a9fbdb50 (     0x8) kCVImageBufferTransferFunction_UseGamma
      */
-    public enum TransferFunction : String {
+    public enum TransferFunction : String, CaseIterable {
         case ITU_R_709_2
         case SMPTE_240M_1995
         case linear = "Linear"
@@ -337,7 +337,7 @@ public extension CVBuffer.Attachments {
      0x00000001a9fbdbb0 (     0x8) kCVImageBufferChromaLocation_DV420
      */
     
-    public enum ChromaLocation : String {
+    public enum ChromaLocation : String, CaseIterable {
         case center     = "Center"
         case top        = "Top"
         case bottom     = "Bottom"
@@ -355,7 +355,7 @@ public extension CVBuffer.Attachments {
      0x00000001a9fbdbd0 (     0x8) kCVImageBufferChromaSubsampling_411
      */
     
-    public enum ChromaSubsampling : String {
+    public enum ChromaSubsampling : String, CaseIterable {
         case _420 = "4:2:0"
         case _422 = "4:2:2"
         case _411 = "4:1:1"
@@ -371,7 +371,7 @@ public extension CVBuffer.Attachments {
      public let kCVImageBufferColorPrimaries_P3_D65: CFString
      public let kCVImageBufferColorPrimaries_P22: CFString
      */
-    public enum ColorPrimaries : String {
+    public enum ColorPrimaries : String, CaseIterable {
         case ITU_R_709_2
         case EBU_3213
         case SMPTE_C

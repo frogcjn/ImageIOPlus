@@ -31,8 +31,8 @@ public extension CGImageDestination {
     }
     
     // add image
-    public func addImage(cgImage: CGImage, properties: Properties? = nil) {
-        CGImageDestinationAddImage(self, cgImage, properties?.rawValue as CFDictionary?)
+    public func addImage(_ image: CGImage, properties: Properties? = nil) {
+        CGImageDestinationAddImage(self, image, properties?.rawValue as CFDictionary?)
     }
     
     public func addImage(imageSource: CGImageSource, index: Int, properties: Properties? = nil) {
@@ -40,12 +40,12 @@ public extension CGImageDestination {
     }
     
     // add image and metadata
-    public func addImage(cgImage: CGImage, metadata: CGImageMetadata?, properties: Properties? = nil) {
-        CGImageDestinationAddImageAndMetadata(self, cgImage, metadata, properties?.rawValue as CFDictionary?)
+    public func addImage(_ image: CGImage, metadata: CGImageMetadata?, properties: Properties? = nil) {
+        CGImageDestinationAddImageAndMetadata(self, image, metadata, properties?.rawValue as CFDictionary?)
     }
     
     // add aux
-    public func addAux(aux: CGImageAux) {
+    public func addAux(_ aux: CGImageAux) {
         CGImageDestinationAddAuxiliaryDataInfo(self, aux.type.rawValue as CFString, aux.info.rawValue as CFDictionary)
     }
     

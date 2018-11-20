@@ -24,7 +24,7 @@ public extension CGImageSource {
     struct Options : RawKeyDictionaryWrapper {
         // CGImageSourceCopyPropertiesAtIndex
         // CGImageSourceCreateImageAtIndex
-        public enum Key : String {
+        public enum Key : String, CaseIterable {
             case typeIdentifierHint     = "kCGImageSourceTypeIdentifierHint"
             case shouldAllowFloat       = "kCGImageSourceShouldAllowFloat"
             case shouldCache            = "kCGImageSourceShouldCache"
@@ -60,7 +60,7 @@ public extension CGImageSource {
             maxPixelSize           = dict[.maxPixelSize]          .map(cfInt)
         }
         
-        public enum SubsampleFactor: Int {
+        public enum SubsampleFactor: Int, CaseIterable {
             case two = 2
             case four = 4
             case eight = 8

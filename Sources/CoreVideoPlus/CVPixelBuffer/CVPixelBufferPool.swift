@@ -113,7 +113,7 @@ public extension CVPixelBufferPool {
 
 public extension CVPixelBufferPool {
     struct Attributes : RawKeyDictionaryWrapper {
-        public enum Key : String {
+        public enum Key : String, CaseIterable {
             case poolName                             = "PoolName" // String
             case poolAdjustableBaseAddressGranularity = "PoolAdjustableBaseAddressGranularity" // Int
             case poolWorstCaseBytesPerRow             = "PoolWorstCaseBytesPerRow" // Int
@@ -144,7 +144,7 @@ public extension CVPixelBufferPool {
 
 public extension CVPixelBufferPool {
     struct AuxAttributes : RawKeyDictionaryWrapper {
-        public enum Key : String {
+        public enum Key : String, CaseIterable {
             case poolAllocationThreshold = "BufferPoolAllocationThreshold"
         }
         

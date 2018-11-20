@@ -44,7 +44,7 @@ public enum CVReturnStatus : RawRepresentable, Swift.Error {
     }
     
 
-    public enum Error : Int32,Swift.Error {
+    public enum Error : Int32, CaseIterable, Swift.Error {
         case Success                         = 0
         case Error                           = -6600
         case InvalidArgument                 = -6661

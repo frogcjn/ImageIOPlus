@@ -36,7 +36,7 @@ public extension CVPixelFormat {
 
 public extension CVPixelFormat {
     struct Description : RawKeyDictionaryWrapper {
-        public enum Key : String {
+        public enum Key : String, CaseIterable {
             
             /*
              kCVPixelBufferMetalCompatibilityKey
