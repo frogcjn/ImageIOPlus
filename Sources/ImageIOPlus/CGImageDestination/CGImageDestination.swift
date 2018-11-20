@@ -45,8 +45,8 @@ public extension CGImageDestination {
     }
     
     // add aux
-    public func addAux(type: CGImageAuxType, aux: CGImageAux) {
-        CGImageDestinationAddAuxiliaryDataInfo(self, type.rawValue as CFString, aux.info.rawValue as CFDictionary)
+    public func addAux(aux: CGImageAux) {
+        CGImageDestinationAddAuxiliaryDataInfo(self, aux.type.rawValue as CFString, aux.info.rawValue as CFDictionary)
     }
     
     // supported UTI

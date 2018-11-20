@@ -13,7 +13,7 @@ import ImageIO
     case matte
 }*/
 
-public enum CGImageAuxType : String {
+public enum CGImageAuxType : String, CaseIterable {
     case disparity            = "kCGImageAuxiliaryDataTypeDisparity"
     case depth                = "kCGImageAuxiliaryDataTypeDepth"
     case portraitEffectsMatte = "kCGImageAuxiliaryDataTypePortraitEffectsMatte"
