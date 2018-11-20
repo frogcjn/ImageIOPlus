@@ -7,6 +7,7 @@
 //
 
 import class CoreGraphics.CGColorSpace
+import CoreGraphics
 
 protocol _CFBridgeable {
     associatedtype CFType
@@ -80,6 +81,22 @@ public func cfData(of value: Any) -> Data {
     return value as! CFData as NSData as Data
 }
 
+public func cfAllocator(of value: Any) -> CFAllocator {
+    return value as! CFAllocator
+}
+
+public func cgImageMetadata(of value: Any) -> CGImageMetadata {
+    return value as! CGImageMetadata
+}
+
+public func cgColor(of value: Any) -> CGColor {
+    return value as! CGColor
+}
+
 public func cgColorSpace(of value: Any) -> CGColorSpace {
     return value as! CGColorSpace
+}
+
+public func cgBitmapInfo(of value: Any) -> CGBitmapInfo {
+    return CGBitmapInfo(rawValue: cfUInt32(of: value))
 }

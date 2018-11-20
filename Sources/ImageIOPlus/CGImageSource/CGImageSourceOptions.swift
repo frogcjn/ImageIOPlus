@@ -30,10 +30,10 @@ public extension CGImageSource {
             case shouldCache            = "kCGImageSourceShouldCache"
             case shouldCacheImmediately = "kCGImageSourceShouldCacheImmediately"
             case subsampleFactor        = "kCGImageSourceSubsampleFactor" // must be an integer CFNumberRef (allowed values: 2, 4, and 8)
-            case fromImageIfAbsent = "kCGImageSourceCreateThumbnailFromImageIfAbsent"  // CFBooleanRef, defult: kCFBooleanFalse
-            case fromImageAlways   = "kCGImageSourceCreateThumbnailFromImageAlways" // CFBooleanRef, defult: kCFBooleanFalse
-            case withTransform     = "kCGImageSourceCreateThumbnailWithTransform" // CFBooleanRef, defult: kCFBooleanFalse
-            case maxPixelSize      = "kCGImageSourceThumbnailMaxPixelSize" // CFNumberRef
+            case fromImageIfAbsent      = "kCGImageSourceCreateThumbnailFromImageIfAbsent"  // CFBooleanRef, defult: kCFBooleanFalse
+            case fromImageAlways        = "kCGImageSourceCreateThumbnailFromImageAlways" // CFBooleanRef, defult: kCFBooleanFalse
+            case withTransform          = "kCGImageSourceCreateThumbnailWithTransform" // CFBooleanRef, defult: kCFBooleanFalse
+            case maxPixelSize           = "kCGImageSourceThumbnailMaxPixelSize" // CFNumberRef
         }
         
         public let shouldCache: Bool?
@@ -49,22 +49,22 @@ public extension CGImageSource {
         public init(dict: Dict, rawKeyDict: RawKeyDict) {
             rawValue = rawKeyDict
             
-            shouldCache            = dict[.shouldCache].map(cfBoolean)
+            shouldCache            = dict[.shouldCache]           .map(cfBoolean)
             shouldCacheImmediately = dict[.shouldCacheImmediately].map(cfBoolean)
-            shouldAllowFloat       = dict[.shouldAllowFloat].map(cfBoolean)
-            subsampleFactor        = dict[.subsampleFactor].map(cfInt).map { SubsampleFactor(rawValue: $0)! }
+            shouldAllowFloat       = dict[.shouldAllowFloat]      .map(cfBoolean)
+            subsampleFactor        = dict[.subsampleFactor]       .map(cfInt).map { SubsampleFactor(rawValue: $0)! }
 
-            fromImageIfAbsent = dict[.fromImageIfAbsent].map(cfBoolean)
-            fromImageAlways   = dict[.fromImageAlways].map(cfBoolean)
-            withTransform     = dict[.withTransform].map(cfBoolean)
-            maxPixelSize      = dict[.maxPixelSize].map(cfInt)
+            fromImageIfAbsent      = dict[.fromImageIfAbsent]     .map(cfBoolean)
+            fromImageAlways        = dict[.fromImageAlways]       .map(cfBoolean)
+            withTransform          = dict[.withTransform]         .map(cfBoolean)
+            maxPixelSize           = dict[.maxPixelSize]          .map(cfInt)
         }
-    }
-    
-    enum SubsampleFactor: Int {
-        case two = 2
-        case four = 4
-        case eight = 8
+        
+        public enum SubsampleFactor: Int {
+            case two = 2
+            case four = 4
+            case eight = 8
+        }
     }
 }
 

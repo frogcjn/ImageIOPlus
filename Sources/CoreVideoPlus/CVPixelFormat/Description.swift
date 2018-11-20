@@ -138,7 +138,7 @@ public extension CVPixelFormat {
         public let blackBlock                : Data?
         public let fillExtendedPixelsCallback: Data?
         
-        public let cgBitmapInfo              : CGBitmapInfo?
+        public let bitmapInfo              : CGBitmapInfo?
         
         public let openGLFormat              : String?
         public let openGLInternalFormat      : String?
@@ -202,7 +202,7 @@ public extension CVPixelFormat {
             blackBlock                 = dict[.blackBlock]                .map(cfData)
             fillExtendedPixelsCallback = dict[.fillExtendedPixelsCallback].map(cfData)
             
-            cgBitmapInfo = dict[.cgBitmapInfo].map(cfUInt32).map { CGBitmapInfo(rawValue: $0) }
+            bitmapInfo                 =  dict[.cgBitmapInfo].map(cgBitmapInfo)
             
             openGLFormat         = dict[.openGLFormat]        .map(cfString)
             openGLInternalFormat = dict[.openGLInternalFormat].map(cfString)

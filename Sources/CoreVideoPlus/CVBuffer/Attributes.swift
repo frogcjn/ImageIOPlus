@@ -77,35 +77,35 @@ public extension CVBuffer {
             qdCompatibility                       = dict[.qdCompatibility]                      .map(cfBoolean)
             
             baseAddressAdjustment                = dict[.baseAddressAdjustment].map(cfInt)
-            width                                = dict[.width].map(cfInt)
-            height                               = dict[.height].map(cfInt)
-            bytesPerRow                          = dict[.bytesPerRow].map(cfInt)
-            bytesPerRowAlignment                 = dict[.bytesPerRowAlignment].map(cfInt)
+            width                                = dict[.width]                .map(cfInt)
+            height                               = dict[.height]               .map(cfInt)
+            bytesPerRow                          = dict[.bytesPerRow]          .map(cfInt)
+            bytesPerRowAlignment                 = dict[.bytesPerRowAlignment] .map(cfInt)
             
-            exactWidth                           = dict[.exactWidth].map(cfInt)
-            exactHeight                          = dict[.exactHeight].map(cfInt)
-            exactBytesPerRow                     = dict[.exactBytesPerRow].map(cfInt)
+            exactWidth                           = dict[.exactWidth]           .map(cfInt)
+            exactHeight                          = dict[.exactHeight]          .map(cfInt)
+            exactBytesPerRow                     = dict[.exactBytesPerRow]     .map(cfInt)
             
-            extendedPixelsLeft                   = dict[.extendedPixelsLeft].map(cfInt)
-            extendedPixelsTop                    = dict[.extendedPixelsTop].map(cfInt)
-            extendedPixelsRight                  = dict[.extendedPixelsRight].map(cfInt)
-            extendedPixelsBottom                 = dict[.extendedPixelsBottom].map(cfInt)
-            extendedPixelsFilled                 = dict[.extendedPixelsFilled].map(cfInt)
+            extendedPixelsLeft                   = dict[.extendedPixelsLeft]   .map(cfInt)
+            extendedPixelsTop                    = dict[.extendedPixelsTop]    .map(cfInt)
+            extendedPixelsRight                  = dict[.extendedPixelsRight]  .map(cfInt)
+            extendedPixelsBottom                 = dict[.extendedPixelsBottom] .map(cfInt)
+            extendedPixelsFilled                 = dict[.extendedPixelsFilled] .map(cfInt)
             
-            planeAlignment                       = dict[.planeAlignment].map(cfInt)
+            planeAlignment                       = dict[.planeAlignment]       .map(cfInt)
             
-            memoryAllocator                      = dict[.memoryAllocator].map{ $0 as! CFAllocator }
+            memoryAllocator                      = dict[.memoryAllocator]            .map(cfAllocator)
             customMemoryLayoutCallbacks          = dict[.customMemoryLayoutCallbacks].map(cfData)
             
             pixelFormatDescription               = dict[.pixelFormatDescription].map(cfString)
             
-            cacheMode                            = dict[.cacheMode].map(cfString)
+            cacheMode                            = dict[.cacheMode]             .map(cfString)
             
-            fixedPointOffset                     = dict[.fixedPointOffset].map(cfInt)
+            fixedPointOffset                     = dict[.fixedPointOffset]      .map(cfInt)
             fixedPointInvalidValue               = dict[.fixedPointInvalidValue].map(cfInt)
-            rotation                             = dict[.rotation].map(cfString)
+            rotation                             = dict[.rotation]              .map(cfString)
             
-            ioSurfaceProperties                  = dict[.ioSurfaceProperties].map(cfDictWithStringKey).map { [IOSurfacePropertyKey: Any].init(rawKeyDict: $0) } //
+            ioSurfaceProperties                  = dict[.ioSurfaceProperties]   .map(cfDictWithStringKey).map { [IOSurfacePropertyKey: Any].init(rawKeyDict: $0) } //
         }
     }
 }

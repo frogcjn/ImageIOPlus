@@ -133,11 +133,11 @@ public extension CVPixelBufferPool {
         public init(dict: Dict, rawKeyDict: RawKeyDict) {
             rawValue = rawKeyDict
             
-            poolName                             = dict[.poolName].map(cfString)
+            poolName                             = dict[.poolName]                            .map(cfString)
             poolAdjustableBaseAddressGranularity = dict[.poolAdjustableBaseAddressGranularity].map(cfInt)
-            poolWorstCaseBytesPerRow             = dict[.poolWorstCaseBytesPerRow].map(cfInt)
-            poolMinimumBufferCount               = dict[.poolMinimumBufferCount].map(cfInt)
-            poolMaximumBufferAge                 = dict[.poolMaximumBufferAge].map(cfDouble)
+            poolWorstCaseBytesPerRow             = dict[.poolWorstCaseBytesPerRow]            .map(cfInt)
+            poolMinimumBufferCount               = dict[.poolMinimumBufferCount]              .map(cfInt)
+            poolMaximumBufferAge                 = dict[.poolMaximumBufferAge]                .map(cfDouble)
         }
     }
 }

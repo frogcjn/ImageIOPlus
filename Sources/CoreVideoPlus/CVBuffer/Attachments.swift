@@ -73,27 +73,27 @@ public extension CVBuffer {
             
             yCbCrMatrix = dict[.yCbCrMatrix]
                 .map(cfString)
-                .map { YCbCrMatrix.init(rawValue: $0)! }
+                .map { YCbCrMatrix(rawValue: $0)! }
             
             colorPrimaries = dict[.colorPrimaries]
                 .map(cfString)
-                .map { ColorPrimaries.init(rawValue: $0)! }
+                .map { ColorPrimaries(rawValue: $0)! }
             
             transferFunction = dict[.transferFunction]
                 .map(cfString)
-                .map { TransferFunction.init(rawValue: $0)! }
+                .map { TransferFunction(rawValue: $0)! }
             
             chromaLocationTopField = dict[.chromaLocationTopField]
                 .map(cfString)
-                .map { ChromaLocation.init(rawValue: $0)! }
+                .map { ChromaLocation(rawValue: $0)! }
             
             chromaLocationBottomField = dict[.chromaLocationBottomField]
                 .map(cfString)
-                .map { ChromaLocation.init(rawValue: $0)! }
+                .map { ChromaLocation(rawValue: $0)! }
             
             chromaSubsampling = dict[.chromaSubsampling]
                 .map(cfString)
-                .map { ChromaSubsampling.init(rawValue: $0)! }
+                .map { ChromaSubsampling(rawValue: $0)! }
             
             alphaChannelIsOpaque         = dict[.alphaChannelIsOpaque].map(cfBoolean)
             contentLightLevelInfo        = dict[.contentLightLevelInfo].map(cfString)
@@ -101,7 +101,7 @@ public extension CVBuffer {
             
             timeValue = dict[.timeValue]
                 .map(cfDictWithStringKey)
-                .map { TimeValue.init(rawValue: $0)! }
+                .map { TimeValue(rawValue: $0)! }
             
         }
     }
@@ -181,10 +181,10 @@ public extension CVBuffer.Attachments {
         public init(dict: Dict, rawKeyDict: RawKeyDict) {
             rawValue = rawKeyDict
             
-            width            = dict[.width]           .map { $0 as! CFNumber as NSNumber as! Float }
-            height           = dict[.height]          .map { $0 as! CFNumber as NSNumber as! Float }
-            horizontalOffset = dict[.horizontalOffset].map { $0 as! CFNumber as NSNumber as! Float }
-            verticalOffset   = dict[.verticalOffset]  .map { $0 as! CFNumber as NSNumber as! Float }
+            width            = dict[.width]           .map(cfFloat)
+            height           = dict[.height]          .map(cfFloat)
+            horizontalOffset = dict[.horizontalOffset].map(cfFloat)
+            verticalOffset   = dict[.verticalOffset]  .map(cfFloat)
         }
     }
     
@@ -213,10 +213,10 @@ public extension CVBuffer.Attachments {
         public init(dict: Dict, rawKeyDict: RawKeyDict) {
             rawValue = rawKeyDict
             
-            temporalTopFirst      = dict[.temporalTopFirst]     .map { $0 as! CFString as NSString as String }
-            temporalBottomFirst   = dict[.temporalBottomFirst]  .map { $0 as! CFString as NSString as String }
-            spatialFirstLineEarly = dict[.spatialFirstLineEarly].map { $0 as! CFString as NSString as String }
-            spatialFirstLineLate  = dict[.spatialFirstLineLate] .map { $0 as! CFString as NSString as String }
+            temporalTopFirst      = dict[.temporalTopFirst]     .map(cfString)
+            temporalBottomFirst   = dict[.temporalBottomFirst]  .map(cfString)
+            spatialFirstLineEarly = dict[.spatialFirstLineEarly].map(cfString)
+            spatialFirstLineLate  = dict[.spatialFirstLineLate] .map(cfString)
         }
     }
     
@@ -238,8 +238,8 @@ public extension CVBuffer.Attachments {
         public init(dict: Dict, rawKeyDict: RawKeyDict) {
             rawValue = rawKeyDict
             
-            horizontalSpacing = dict[.horizontalSpacing].map { $0 as! CFNumber as NSNumber as! Float }
-            verticalSpacing   = dict[.verticalSpacing]  .map { $0 as! CFNumber as NSNumber as! Float }
+            horizontalSpacing = dict[.horizontalSpacing].map(cfFloat)
+            verticalSpacing   = dict[.verticalSpacing]  .map(cfFloat)
         }
     }
     
@@ -260,8 +260,8 @@ public extension CVBuffer.Attachments {
         public init(dict: Dict, rawKeyDict: RawKeyDict) {
             rawValue = rawKeyDict
             
-            width  = dict[.width] .map { $0 as! CFNumber as NSNumber as! Float }
-            height = dict[.height].map { $0 as! CFNumber as NSNumber as! Float }
+            width  = dict[.width] .map(cfFloat)
+            height = dict[.height].map(cfFloat)
         }
     }
     
@@ -278,8 +278,8 @@ public extension CVBuffer.Attachments {
         public init(dict: Dict, rawKeyDict: RawKeyDict) {
             rawValue = rawKeyDict
             
-            timeScale = dict[.timeScale].map { $0 as! CFNumber as NSNumber as! Float }
-            timeValue = dict[.timeValue].map { $0 as! CFNumber as NSNumber as! Float }
+            timeScale = dict[.timeScale].map(cfFloat)
+            timeValue = dict[.timeValue].map(cfFloat)
         }
     }
     /*

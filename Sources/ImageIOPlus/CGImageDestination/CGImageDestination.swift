@@ -31,22 +31,22 @@ public extension CGImageDestination {
     }
     
     // add image
-    public func addImage(cgImage: CGImage, properties: [String : Any]? = nil) { // Destination Properties, or CGImageProperties
-        CGImageDestinationAddImage(self, cgImage, properties as CFDictionary?)
+    public func addImage(cgImage: CGImage, properties: Properties? = nil) {
+        CGImageDestinationAddImage(self, cgImage, properties?.rawValue as CFDictionary?)
     }
     
-    public func addImage(imageSource: CGImageSource, index: Int, properties: [String : Any]? = nil) { // Destination Properties, or CGImageProperties
-        CGImageDestinationAddImageFromSource(self, imageSource, index, properties as CFDictionary?)
+    public func addImage(imageSource: CGImageSource, index: Int, properties: Properties? = nil) {
+        CGImageDestinationAddImageFromSource(self, imageSource, index, properties?.rawValue as CFDictionary?)
     }
     
     // add image and metadata
-    public func addImage(cgImage: CGImage, metadata: CGImageMetadata?, options: [String : Any]? = nil) { // ??
-        CGImageDestinationAddImageAndMetadata(self, cgImage, metadata, options as CFDictionary?)
+    public func addImage(cgImage: CGImage, metadata: CGImageMetadata?, properties: Properties? = nil) {
+        CGImageDestinationAddImageAndMetadata(self, cgImage, metadata, properties?.rawValue as CFDictionary?)
     }
     
     // add aux
     public func addAux(type: CGImageAuxType, aux: CGImageAux) {
-        CGImageDestinationAddAuxiliaryDataInfo(self, type.rawValue as CFString, aux.rawValue as CFDictionary)
+        CGImageDestinationAddAuxiliaryDataInfo(self, type.rawValue as CFString, aux.info.rawValue as CFDictionary)
     }
     
     // supported UTI
@@ -59,8 +59,8 @@ public extension CGImageDestination {
     }
     
     // Settings Properties
-    public func setProperties(_ properties: [String : Any]?) { // Destination Properties, or CGImageProperties
-        CGImageDestinationSetProperties(self, properties as CFDictionary?)
+    public func setProperties(_ properties: Properties) {
+        CGImageDestinationSetProperties(self, properties.rawValue as CFDictionary)
     }
     
     // finalize

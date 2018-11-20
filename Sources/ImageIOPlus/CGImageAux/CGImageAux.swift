@@ -13,25 +13,38 @@ import ImageIOPlusBase
 // kCGImageAux
 // kCGImageAuxMetadata
 // kCGImageAuxDescription
-public struct CGImageAux : RawKeyDictionaryWrapper {
-    public typealias RawValue = [String: Any]
+public struct CGImageAux {
+    public struct Info: RawKeyDictionaryWrapper {
+        public typealias RawValue = [String: Any]
 
-    public enum Key : String {
-        case metadata        = "kCGImageAuxiliaryDataInfoMetadata"
-        case data            = "kCGImageAuxiliaryDataInfoData"
-        case dataDescription = "kCGImageAuxiliaryDataInfoDataDescription"
+        public enum Key : String {
+            case metadata        = "kCGImageAuxiliaryDataInfoMetadata"
+            case data            = "kCGImageAuxiliaryDataInfoData"
+            case dataDescription = "kCGImageAuxiliaryDataInfoDataDescription"
+        }
+
+        public let metadata: CGImageMetadata
+        public let data: Data
+        public let dataDescription: [String: Any]
+        public let rawValue: RawKeyDict
+        public init?(dict: Dict, rawKeyDict: RawKeyDict) {
+            self.rawValue = rawKeyDict
+
+                   metadata = dict[.metadata]       .map(cgImageMetadata)!
+                       data = dict[.data]           .map(cfData)!
+            dataDescription = dict[.dataDescription].map(cfDictWithStringKey)!
+        }
     }
-
-    public let metadata: CGImageMetadata
-    public let data: Data
-    public let dataDescription: [String: Any]
-    public let rawValue: RawKeyDict
-    public init?(dict: Dict, rawKeyDict: RawKeyDict) {
-        self.rawValue = rawKeyDict
-
-        metadata = dict[.metadata] as! CGImageMetadata
-        data = dict[.data] as! CFData as Data
-        dataDescription = dict[.dataDescription] as! [String: Any]
+    
+    public let info: Info
+    public let type: CGImageAuxType
+    
+    public init?(rawValue: Info.RawValue, type: CGImageAuxType) {
+        guard let info = Info(rawValue: rawValue) else {
+            return nil
+        }
+        self.type = type
+        self.info = info
     }
 
     /*public var rawValue: [String: Any] {
@@ -52,16 +65,31 @@ public struct CGImageAux : RawKeyDictionaryWrapper {
     }*/
 }
 
-import AVFoundation
+import class Foundation.NSString
 
-public extension AVDepthData {
-    convenience init(aux: CGImageAux) throws {
-        try self.init(fromDictionaryRepresentation: aux.rawValue)
+public protocol AuxConvertible {
+    init(fromDictionaryRepresentation: [AnyHashable : Any]) throws
+    func applyingExifOrientation(_ exifOrientation: CGImagePropertyOrientation) -> Self
+    func dictionaryRepresentation(forAuxiliaryDataType: AutoreleasingUnsafeMutablePointer<NSString?>?) -> [AnyHashable : Any]?
+}
+
+public extension AuxConvertible {
+    init(aux: CGImageAux) throws {
+        try self.init(fromDictionaryRepresentation: aux.info.rawValue)
+    }
+    
+    func auxRepresentation() -> CGImageAux {
+        var rawType: NSString?
+        let rawAux = dictionaryRepresentation(forAuxiliaryDataType: &rawType) as! [String: Any]?
+        return CGImageAux(rawValue: rawAux!, type: CGImageAuxType.init(rawValue: rawType! as String)!)!
     }
 }
 
-public extension AVPortraitEffectsMatte {
-    convenience init(aux: CGImageAux) throws {
-        try self.init(fromDictionaryRepresentation: aux.rawValue)
-    }
+import class AVFoundation.AVDepthData
+import class AVFoundation.AVPortraitEffectsMatte
+
+extension AVDepthData : AuxConvertible {
+}
+
+extension AVPortraitEffectsMatte : AuxConvertible {
 }
