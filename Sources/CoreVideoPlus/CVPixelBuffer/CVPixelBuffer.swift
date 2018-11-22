@@ -216,6 +216,10 @@ public extension CVPixelBuffer {
         return CVPixelBufferGetHeight(self)
     }
     
+    var size: Int.Size {
+        return (width: width, height: height)
+    }
+    
     /*!
      @function   CVPixelBufferGetBytesPerRow
      @abstract   Returns the rowBytes of the PixelBuffer.
