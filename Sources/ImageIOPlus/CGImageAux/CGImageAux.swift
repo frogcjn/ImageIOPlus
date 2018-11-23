@@ -14,30 +14,8 @@ import ImageIOPlusBase
 // kCGImageAuxMetadata
 // kCGImageAuxDescription
 public struct CGImageAux {
-    public struct Info: RawKeyDictionaryWrapper {
-        public typealias RawValue = [String: Any]
-
-        public enum Key : String, CaseIterable {
-            case metadata        = "kCGImageAuxiliaryDataInfoMetadata"
-            case data            = "kCGImageAuxiliaryDataInfoData"
-            case dataDescription = "kCGImageAuxiliaryDataInfoDataDescription"
-        }
-
-        public let metadata: CGImageMetadata
-        public let data: Data
-        public let dataDescription: [String: Any]
-        public let rawValue: RawKeyDict
-        public init?(dict: Dict, rawKeyDict: RawKeyDict) {
-            self.rawValue = rawKeyDict
-
-                   metadata = dict[.metadata]       .map(cgImageMetadata)!
-                       data = dict[.data]           .map(cfData)!
-            dataDescription = dict[.dataDescription].map(cfDictWithStringKey)!
-        }
-    }
-    
-    public let info: Info
-    public let type: CGImageAuxType
+    public var info: Info
+    public var type: CGImageAuxType
     
     public init?(rawValue: Info.RawValue, type: CGImageAuxType) {
         guard let info = Info(rawValue: rawValue) else {
@@ -46,23 +24,40 @@ public struct CGImageAux {
         self.type = type
         self.info = info
     }
+}
 
-    /*public var rawValue: [String: Any] {
-        /*return [
-            kCGImageAuxMetadata as String: metadata,
-            kCGImageAux as String: data,
-            kCGImageAuxDescription as String: dataDescription
-        ]*/
-        /*if let _rawValue = _rawValue {
-            return _rawValue
-        } else {*/
+public extension CGImageAux {
+    struct Info: RawKeyDictionaryWrapper {
+        public typealias RawValue = [String: Any]
+        
+        public enum Key : String, CaseIterable {
+            case metadata        = "kCGImageAuxiliaryDataInfoMetadata"
+            case data            = "kCGImageAuxiliaryDataInfoData"
+            case dataDescription = "kCGImageAuxiliaryDataInfoDataDescription"
+        }
+        
+        public var metadata: CGImageMetadata
+        public var data: Data
+        public var dataDescription: [String: Any]
+        
+        public let _rawValue: RawKeyDict
+        
+        public var rawValue: RawKeyDict {
             return [
-                kCGImageAuxMetadata as String: metadata,
-                kCGImageAux as String: data,
-                kCGImageAuxDescription as String: dataDescription
+                Key.metadata       .rawValue: metadata,
+                Key.data           .rawValue: data,
+                Key.dataDescription.rawValue: dataDescription
             ]
-        //}
-    }*/
+        }
+        
+        public init?(dict: Dict, rawKeyDict: RawKeyDict) {
+            _rawValue = rawKeyDict
+            
+            metadata = dict[.metadata]       .map(cgImageMetadata)!
+            data = dict[.data]           .map(cfData)!
+            dataDescription = dict[.dataDescription].map(cfDictWithStringKey)!
+        }
+    }
 }
 
 import class Foundation.NSString
@@ -93,3 +88,20 @@ extension AVDepthData : AuxConvertible {
 
 extension AVPortraitEffectsMatte : AuxConvertible {
 }
+
+/*public var rawValue: [String: Any] {
+ /*return [
+ kCGImageAuxMetadata as String: metadata,
+ kCGImageAux as String: data,
+ kCGImageAuxDescription as String: dataDescription
+ ]*/
+ /*if let _rawValue = _rawValue {
+ return _rawValue
+ } else {*/
+ return [
+ kCGImageAuxMetadata as String: metadata,
+ kCGImageAux as String: data,
+ kCGImageAuxDescription as String: dataDescription
+ ]
+ //}
+ }*/
