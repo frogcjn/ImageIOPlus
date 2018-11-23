@@ -11,6 +11,80 @@ import ImageIOPlusBase
 import typealias ImageIOPlusBase.Float16Raw
 import Accelerate
 
+// resizing float 32 (for depth/disparity data map resizing)
+public extension CVPixelBuffer {
+    /**
+     First crops the pixel buffer, then resizes it.
+     */
+    func resizing_float32(
+        cropX: Int,
+        cropY: Int,
+        cropWidth: Int,
+        cropHeight: Int,
+        scaleWidth: Int,
+        scaleHeight: Int
+        ) -> CVPixelBuffer? {
+        let srcPixelBuffer = self
+        CVPixelBufferLockBaseAddress(srcPixelBuffer, CVPixelBufferLockFlags(rawValue: 0))
+        guard let srcData = CVPixelBufferGetBaseAddress(srcPixelBuffer) else {
+            print("Error: could not get pixel buffer base address")
+            return nil
+        }
+        let bytesPerPixel = 4
+        let srcBytesPerRow = CVPixelBufferGetBytesPerRow(srcPixelBuffer)
+        let offset = cropY*srcBytesPerRow + cropX*bytesPerPixel
+        var srcBuffer = vImage_Buffer(data: srcData.advanced(by: offset),
+                                      height: vImagePixelCount(cropHeight),
+                                      width: vImagePixelCount(cropWidth),
+                                      rowBytes: srcBytesPerRow)
+        
+        let destBytesPerRow = scaleWidth*bytesPerPixel
+        guard let destData = malloc(scaleHeight*destBytesPerRow) else {
+            print("Error: out of memory")
+            return nil
+        }
+        var destBuffer = vImage_Buffer(data: destData,
+                                       height: vImagePixelCount(scaleHeight),
+                                       width: vImagePixelCount(scaleWidth),
+                                       rowBytes: destBytesPerRow)
+        
+        let error = vImageScale_PlanarF(&srcBuffer, &destBuffer, nil, vImage_Flags(0))
+        CVPixelBufferUnlockBaseAddress(srcPixelBuffer, CVPixelBufferLockFlags(rawValue: 0))
+        if error != kvImageNoError {
+            print("Error:", error)
+            free(destData)
+            return nil
+        }
+        
+        let releaseCallback: CVPixelBufferReleaseBytesCallback = { _, ptr in
+            if let ptr = ptr {
+                free(UnsafeMutableRawPointer(mutating: ptr))
+            }
+        }
+        
+        let pixelFormat = CVPixelBufferGetPixelFormatType(srcPixelBuffer)
+        var dstPixelBuffer: CVPixelBuffer?
+        let status = CVPixelBufferCreateWithBytes(nil, scaleWidth, scaleHeight,
+                                                  pixelFormat, destData,
+                                                  destBytesPerRow, releaseCallback,
+                                                  nil, nil, &dstPixelBuffer)
+        if status != kCVReturnSuccess {
+            print("Error: could not create new pixel buffer")
+            free(destData)
+            return nil
+        }
+        return dstPixelBuffer
+    }
+    
+    func resizing_float32(width: Int, height: Int) -> CVPixelBuffer? {
+        return resizing_float32(
+            cropX: 0, cropY: 0,
+            cropWidth: self.width, cropHeight: self.height,
+            scaleWidth: width, scaleHeight: height
+        )
+    }
+}
+
 public extension CVPixelBuffer {
     /*func pixel<Element>(x: Int, y: Int, elementType: Element.Type) -> Element {
         return withBaseAddressLocked(.readOnly) {
