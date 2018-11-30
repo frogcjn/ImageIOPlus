@@ -10,6 +10,8 @@ import ImageIO
 import struct Foundation.Data
 import ImageIOPlusBase
 
+#if os(watchOS)
+#else
 // kCGImageAux
 // kCGImageAuxMetadata
 // kCGImageAuxDescription
@@ -62,6 +64,7 @@ public extension CGImageAux {
 
 import class Foundation.NSString
 
+
 public protocol AuxConvertible {
     init(fromDictionaryRepresentation: [AnyHashable : Any]) throws
     func applyingExifOrientation(_ exifOrientation: CGImagePropertyOrientation) -> Self
@@ -80,15 +83,17 @@ public extension AuxConvertible {
     }
 }
 
-import class AVFoundation.AVDepthData
-import class AVFoundation.AVPortraitEffectsMatte
+import AVFoundation
 
+@available(macOS 10.13, iOS 11, tvOS 11, *)
 extension AVDepthData : AuxConvertible {
 }
 
+@available(macOS 10.14, iOS 12, tvOS 12, *)
 extension AVPortraitEffectsMatte : AuxConvertible {
 }
 
+#endif
 /*public var rawValue: [String: Any] {
  /*return [
  kCGImageAuxMetadata as String: metadata,

@@ -45,9 +45,13 @@ public extension CGImageDestination {
     }
     
     // add aux
+    #if os(watchOS)
+    #else
+    @available(macOS 10.13, iOS 11, tvOS 11, *)
     public func addAux(_ aux: CGImageAux) {
         CGImageDestinationAddAuxiliaryDataInfo(self, aux.type.rawValue as CFString, aux.info.rawValue as CFDictionary)
     }
+    #endif
     
     // supported UTI
     public static var supportedUTIs: [UTI] {

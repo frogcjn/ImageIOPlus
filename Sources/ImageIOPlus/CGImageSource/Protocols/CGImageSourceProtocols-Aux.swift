@@ -11,20 +11,25 @@ import AVFoundation
 
 // MARK: - Aux Protocol
 
+#if os(watchOS)
+#else
+@available(macOS 10.13, iOS 11, tvOS 11, *)
 public protocol CGImageSourceSharedAuxProtocol {
     func aux(type: CGImageAuxType) -> CGImageAux? /* required implementation for CGImageSourceImage */
     func containsAux(type: CGImageAuxType) -> Bool
     
     var depthDataWithoutApplyingOrientation: AVDepthData? { get }
-    var portraitEffectsMatteWithoutApplyingOrientation: AVPortraitEffectsMatte? { get }
-    
     var depthData: AVDepthData? { get }
+
+    @available(macOS 10.14, iOS 12, tvOS 12, *)
+    var portraitEffectsMatteWithoutApplyingOrientation: AVPortraitEffectsMatte? { get }
+    @available(macOS 10.14, iOS 12, tvOS 12, *)
     var portraitEffectsMatte: AVPortraitEffectsMatte? { get }
 }
 
 
 // MARK: - Aux of ImageSource
-
+@available(macOS 10.13, iOS 11, tvOS 11, *)
 public protocol CGImageSourceAuxProtocol : CGImageSourceSharedAuxProtocol, CGImageSourceCollectionProtocol {
     func auxImageIndex(type: CGImageAuxType) -> Self.Index?
     
@@ -33,12 +38,13 @@ public protocol CGImageSourceAuxProtocol : CGImageSourceSharedAuxProtocol, CGIma
 }
 
 // MARK: - Aux of ImageSourceImage
-
+@available(macOS 10.13, iOS 11, tvOS 11, *)
 public protocol CGImageSourceImageAuxProtocol : CGImageSourceSharedAuxProtocol {
     
 }
 
 // MARK: - Default Implementation: Aux
+@available(macOS 10.13, iOS 11, tvOS 11, *)
 public extension CGImageSourceSharedAuxProtocol {
     func containsAux(type: CGImageAuxType) -> Bool {
         return aux(type: type) != nil
@@ -46,19 +52,12 @@ public extension CGImageSourceSharedAuxProtocol {
 }
 
 // MARK: - Default Implementation: Aux of Image
+@available(macOS 10.13, iOS 11, tvOS 11, *)
 extension CGImageSourceImageAuxProtocol where Self : CGImageSourceImageStatusProtocol {
     
     public var depthDataWithoutApplyingOrientation: AVDepthData? {
         do {
             return try (aux(type: .disparity) ?? aux(type: .depth)).map { try AVDepthData(aux: $0) }
-        } catch {
-            print(error)
-            return nil
-        }
-    }
-    public var portraitEffectsMatteWithoutApplyingOrientation: AVPortraitEffectsMatte? {
-        do {
-            return try aux(type: .portraitEffectsMatte).map { try AVPortraitEffectsMatte(aux: $0) }
         } catch {
             print(error)
             return nil
@@ -73,6 +72,17 @@ extension CGImageSourceImageAuxProtocol where Self : CGImageSourceImageStatusPro
         return depthDataWithoutApplyingOrientation?.applyingExifOrientation(CGImagePropertyOrientation(rawValue: properties[kCGImagePropertyOrientation as String] as! UInt32)!)
     }
     
+    @available(macOS 10.14, iOS 12, tvOS 12, *)
+    public var portraitEffectsMatteWithoutApplyingOrientation: AVPortraitEffectsMatte? {
+        do {
+            return try aux(type: .portraitEffectsMatte).map { try AVPortraitEffectsMatte(aux: $0) }
+        } catch {
+            print(error)
+            return nil
+        }
+    }
+    
+    @available(macOS 10.14, iOS 12, tvOS 12, *)
     public var portraitEffectsMatte: AVPortraitEffectsMatte? {
         guard let properties = /*auxImage(type: .portraitEffectsMatte)?*/ self.properties else {
             print("disparityOrDepth, invalidProperties")
@@ -83,11 +93,16 @@ extension CGImageSourceImageAuxProtocol where Self : CGImageSourceImageStatusPro
 }
 
 // MARK: - Default Implementation: Aux of ImageSource
+@available(macOS 10.13, iOS 11, tvOS 11, *)
 public extension CGImageSourceAuxProtocol where Self.Element : CGImageSourceImageAuxProtocol {
     
     // aux image
     func auxImageIndex(type: CGImageAuxType) -> Self.Index? {
-        return primaryOrderedIndices.first { self[$0].containsAux(type: type) }
+        if #available(macOS 10.14, iOS 12, tvOS 12, *) {
+            return primaryOrderedIndices.first { self[$0].containsAux(type: type) }
+        } else {
+            return indices.first { self[$0].containsAux(type: type) }
+        }
     }
     
     func auxImage(type: CGImageAuxType) -> Self.Element? {
@@ -107,19 +122,21 @@ public extension CGImageSourceAuxProtocol where Self.Element : CGImageSourceImag
         return (auxImage(type: .disparity) ?? auxImage(type: .depth))?.depthDataWithoutApplyingOrientation
     }
     
-    public var portraitEffectsMatteWithoutApplyingOrientation: AVPortraitEffectsMatte? {
-        return auxImage(type: .portraitEffectsMatte)?.portraitEffectsMatteWithoutApplyingOrientation
-    }
-    
     public var depthData: AVDepthData? {
         return (auxImage(type: .disparity) ?? auxImage(type: .depth))?.depthData
     }
     
+    @available(macOS 10.14, iOS 12, tvOS 12, *)
+    public var portraitEffectsMatteWithoutApplyingOrientation: AVPortraitEffectsMatte? {
+        return auxImage(type: .portraitEffectsMatte)?.portraitEffectsMatteWithoutApplyingOrientation
+    }
+    
+    @available(macOS 10.14, iOS 12, tvOS 12, *)
     public var portraitEffectsMatte: AVPortraitEffectsMatte? {
         return auxImage(type: .portraitEffectsMatte)?.portraitEffectsMatte
     }
 }
-
+#endif
 
 
 /*

@@ -7,6 +7,7 @@
 //
 import CoreVideo
 import ImageIOPlusBase
+import struct Foundation.Data
 
 public extension CVBuffer {
     struct Attributes : RawKeyDictionaryWrapper {
@@ -54,7 +55,11 @@ public extension CVBuffer {
         public let fixedPointInvalidValue               : Int?
         public let rotation                             : String?
         
+        #if os(watchOS)
+        public let ioSurfaceProperties                  : [String: Any]?
+        #else
         public let ioSurfaceProperties                  : [IOSurfacePropertyKey: Any]?
+        #endif
         
         public let rawValue: RawKeyDict
         public init(dict: Dict, rawKeyDict: RawKeyDict) {
@@ -104,8 +109,11 @@ public extension CVBuffer {
             fixedPointOffset                     = dict[.fixedPointOffset]      .map(cfInt)
             fixedPointInvalidValue               = dict[.fixedPointInvalidValue].map(cfInt)
             rotation                             = dict[.rotation]              .map(cfString)
-            
-            ioSurfaceProperties                  = dict[.ioSurfaceProperties]   .map(cfDictWithStringKey).map { [IOSurfacePropertyKey: Any].init(rawKeyDict: $0) } //
+            #if os(watchOS)
+            ioSurfaceProperties                  = dict[.ioSurfaceProperties]   .map(cfDictWithStringKey)
+            #else
+            ioSurfaceProperties                  = dict[.ioSurfaceProperties]   .map(cfDictWithStringKey).map { [IOSurfacePropertyKey: Any].init(rawKeyDict: $0) }
+            #endif
         }
     }
 }

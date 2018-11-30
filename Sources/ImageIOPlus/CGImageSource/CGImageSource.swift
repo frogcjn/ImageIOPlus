@@ -72,7 +72,8 @@ extension CGImageSource : CGImageSourceCollectionProtocol {
     public subscript(_ index: Int) -> CGImageSourceImage {
         return CGImageSourceImage(index: index, imageSource: self)
     }
-
+    
+    @available(macOS 10.14, iOS 12, tvOS 12, watchOS 5, *)
     public var primaryImageIndex: Int? {
         let primaryImageIndex = CGImageSourceGetPrimaryImageIndex(self)
         guard 0..<count ~= primaryImageIndex else { return nil }
@@ -81,7 +82,9 @@ extension CGImageSource : CGImageSourceCollectionProtocol {
 }
 
 // MARK: - Aux of CGImageSource
-
+#if os(watchOS)
+#else
 extension CGImageSource : CGImageSourceAuxProtocol {
 
 }
+#endif

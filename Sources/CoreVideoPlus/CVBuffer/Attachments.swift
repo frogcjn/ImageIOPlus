@@ -8,6 +8,7 @@
 
 import CoreVideo
 import ImageIOPlusBase
+import struct Foundation.Data
 
 public extension CVBuffer {
     public struct Attachments : RawKeyDictionaryWrapper {
@@ -382,6 +383,7 @@ public extension CVBuffer.Attachments {
     }
 }
 
+@available(macOS 10.13, iOS 11, tvOS 11, watchOS 4, *)
 public extension CVBuffer.Attachments.ColorPrimaries {
     var codePoint: Int32 {
         return CVColorPrimariesGetIntegerCodePointForString(rawValue as CFString)
@@ -395,6 +397,7 @@ public extension CVBuffer.Attachments.ColorPrimaries {
     }
 }
 
+@available(macOS 10.13, iOS 11, tvOS 11, watchOS 4, *)
 public extension CVBuffer.Attachments.TransferFunction {
     var codePoint: Int32 {
         return CVTransferFunctionGetIntegerCodePointForString(rawValue as CFString)
@@ -408,7 +411,7 @@ public extension CVBuffer.Attachments.TransferFunction {
     }
 }
 
-
+@available(macOS 10.13, iOS 11, tvOS 11, watchOS 4, *)
 public extension CVBuffer.Attachments.YCbCrMatrix {
     var codePoint: Int32 {
         return CVYCbCrMatrixGetIntegerCodePointForString(rawValue as CFString)

@@ -42,9 +42,20 @@ extension UTI : UTIConvertible {
     }
 }
 
-import AVKit
+// import struct AVFoundation.AVFileType
 
-extension AVFileType : UTIConvertible {
+/*extension AVFileType : UTIConvertible {
+    public var uti: UTI {
+        return UTI(rawValue: rawValue)
+    }
+}*/
+
+public enum ImageIOPlusFileType : String {
+    case jpeg = "public.jpeg"
+    case heic = "public.heic"
+}
+
+extension ImageIOPlusFileType: UTIConvertible {
     public var uti: UTI {
         return UTI(rawValue: rawValue)
     }

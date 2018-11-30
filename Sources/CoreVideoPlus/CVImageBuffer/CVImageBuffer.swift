@@ -68,6 +68,7 @@ public extension CVImageBuffer {
     }
 }
 
+@available(macOS 10.12, iOS 10, tvOS 10, watchOS 3, *)
 public extension CVImageBuffer {
     /*!
      @function   CVImageBufferCreateColorSpaceFromAttachments

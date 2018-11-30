@@ -9,6 +9,7 @@
 import CoreFoundation
 import CoreVideo
 import ImageIOPlusBase
+import struct Foundation.Data
 
 // description API
 public extension CVPixelFormat {

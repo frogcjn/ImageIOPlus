@@ -8,6 +8,7 @@
 
 import class CoreGraphics.CGColorSpace
 import CoreGraphics
+import class ImageIO.CGImageMetadata
 
 protocol _CFBridgeable {
     associatedtype CFType

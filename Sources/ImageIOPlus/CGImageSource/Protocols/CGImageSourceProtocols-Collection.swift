@@ -22,10 +22,16 @@ public protocol CGImageSourceCollectionProtocol : Collection {
     var images: Elements { get }
     
     // primary image
+    @available(macOS 10.14, iOS 12, tvOS 12, watchOS 5, *)
     var primaryImageIndex: Int? { get }  /* required implmentation */
+    
+    @available(macOS 10.14, iOS 12, tvOS 12, watchOS 5, *)
     var primaryOrderedIndices: Indices { get }
     
+    @available(macOS 10.14, iOS 12, tvOS 12, watchOS 5, *)
     var primaryImage: Element? { get }
+    
+    @available(macOS 10.14, iOS 12, tvOS 12, watchOS 5, *)
     var primaryOrderedImages: Elements { get }
 }
 
@@ -53,19 +59,13 @@ public extension CGImageSourceCollectionProtocol where Self.Indices == ArraySlic
         return indices.lazy.map { self[$0] }
     }
     
-    // primary image
-    public var primaryImage: Element? {
-        return primaryImageIndex.map { self[$0] }
-    }
-    
-    public var primaryOrderedImages: LazyMapCollection<Indices, Element> {
-        return primaryOrderedIndices.lazy.map { self[$0] }
-    }
-    
     public var indices: Indices {
         return [Int](0..<count)[...]
     }
     
+    // primary image
+    
+    @available(macOS 10.14, iOS 12, tvOS 12, watchOS 5, *)
     public var primaryOrderedIndices: Indices {
         guard let primaryImageIndex = primaryImageIndex else {
             return self.indices
@@ -73,6 +73,16 @@ public extension CGImageSourceCollectionProtocol where Self.Indices == ArraySlic
         var indices = self.indices
         indices.insert(indices.remove(at: primaryImageIndex), at: 0)
         return indices
+    }
+    
+    @available(macOS 10.14, iOS 12, tvOS 12, watchOS 5, *)
+    public var primaryImage: Element? {
+        return primaryImageIndex.map { self[$0] }
+    }
+    
+    @available(macOS 10.14, iOS 12, tvOS 12, watchOS 5, *)
+    public var primaryOrderedImages: LazyMapCollection<Indices, Element> {
+        return primaryOrderedIndices.lazy.map { self[$0] }
     }
 }
 

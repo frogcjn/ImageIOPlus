@@ -54,13 +54,15 @@ extension CGImageSourceImage : CGImageSourceImageStatusProtocol {
 }
 
 // MARK: - Aux of ImageSourceImage
-
+#if os(watchOS)
+#else
+@available(macOS 10.13, iOS 11, tvOS 11, *)
 extension CGImageSourceImage : CGImageSourceImageAuxProtocol {
     public func aux(type: CGImageAuxType) -> CGImageAux? {
         return (CGImageSourceCopyAuxiliaryDataInfoAtIndex(imageSource, index, type.rawValue as CFString) as! [String: Any]?).map { CGImageAux.init(rawValue: $0, type: type)! }
     }
 }
-
+#endif
 /*
  //extension CGImageSourceImage : AuxProtocol {
  

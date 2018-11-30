@@ -10,7 +10,7 @@ import CoreVideo
 import ImageIOPlusBase
 import typealias ImageIOPlusBase.Float16Raw
 import Accelerate
-
+import struct Foundation.Data
 // resizing float 32 (for depth/disparity data map resizing)
 public extension CVPixelBuffer {
     /**
